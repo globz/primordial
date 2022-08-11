@@ -1,0 +1,351 @@
+/* This file is for your main application CSS */
+/* @import "./phoenix.css"; */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base */
+@layer base {
+    a {
+        @apply text-[#0069d9] no-underline;
+    }
+
+    a:focus, a:hover {
+        @apply text-[#606c76];
+    }
+
+    h1 {
+        @apply text-2xl font-bold;
+    }
+
+    h2 {
+        @apply text-xl font-bold;
+    }
+
+    p {
+        @apply mt-1 text-sm;
+    }
+
+    span svg {
+        @apply inline-block align-middle;
+    }
+
+    input {
+        @apply appearance-none bg-transparent border-2 border-solid border border-[#d1d1d1] rounded-md h-11 pt-[0.6rem] pr-[1rem] pb-[0.7rem] pl-[1rem] w-full;
+    }
+}
+
+/* Components */
+@layer components {
+    .btn-primary {
+        @apply py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75;
+    }
+
+    .container {
+        @apply my-0 m-auto bg-white max-w-screen-xl px-8 relative w-full;
+    }
+
+    .banner {
+        @apply text-center border-b-4 bg-[#eee] border-[#e3e3e3] rounded-md font-extralight text-lg mb-5;
+    }
+}
+
+/* Alerts and form errors used by phx.new */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.alert-info {
+    color: #31708f;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+    border-radius: 4px;
+    padding-left: 2em;
+    margin-bottom: 2em;
+    border: 1px solid transparent;    
+}
+
+.alert-warning {
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+    border-radius: 4px;
+    padding-left: 2em;
+    margin-bottom: 2em;
+    border: 1px solid transparent;    
+}
+
+.alert-danger {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+    border-radius: 4px;
+    padding-left: 2em;
+    margin-bottom: 2em;
+    border: 1px solid transparent;    
+}
+
+.alert p {
+    margin-bottom: 0;
+}
+
+.alert:empty {
+    display: none;
+}
+
+.invalid-feedback {
+    color: #a94442;
+    display: block;
+    margin-top: 1em;
+}
+
+/* LiveView specific classes for your customization */
+.phx-no-feedback.invalid-feedback,
+.phx-no-feedback .invalid-feedback {
+    display: none;
+}
+
+.phx-click-loading {
+    opacity: 0.5;
+    transition: opacity 1s ease-out;
+}
+
+.phx-loading{
+    cursor: wait;
+}
+
+.phx-modal {
+    opacity: 1!important;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.phx-modal-content {
+    background-color: #fefefe;
+    margin: 15vh auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.phx-modal-close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.phx-modal-close:hover,
+.phx-modal-close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.fade-in-scale {
+    animation: 0.2s ease-in 0s normal forwards 1 fade-in-scale-keys;
+}
+
+.fade-out-scale {
+    animation: 0.2s ease-out 0s normal forwards 1 fade-out-scale-keys;
+}
+
+.fade-in {
+    animation: 0.2s ease-out 0s normal forwards 1 fade-in-keys;
+}
+.fade-out {
+    animation: 0.2s ease-out 0s normal forwards 1 fade-out-keys;
+}
+
+@keyframes fade-in-scale-keys{
+    0% { scale: 0.95; opacity: 0; }
+    100% { scale: 1.0; opacity: 1; }
+}
+
+@keyframes fade-out-scale-keys{
+    0% { scale: 1.0; opacity: 1; }
+    100% { scale: 0.95; opacity: 0; }
+}
+
+@keyframes fade-in-keys{
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes fade-out-keys{
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* id_card - Style the component directly in HTML */
+h1#title,p.info{
+    margin: 0;
+}
+
+h1#title{
+    font-family: monospace;
+    font-weight: lighter;
+    font-size: 25px;
+}
+
+.info {
+    font-family: serif;
+    font-weight: bold;
+}
+
+#id-card p {
+    font-family: ui-monospace;
+    display: inline-block;
+    margin: 5px 1px;
+    font-size: 15px;
+}
+
+#id-card {
+    border: solid 2px #000;
+    border-radius: 10px;
+    box-shadow: 1px 2px 10px #000;
+    background-color: #E9EEF2;
+    margin: auto;
+    width: 80%;
+}
+
+#card-title {
+    padding: 5px;
+    color: #fff;
+    letter-spacing: 2px;
+    text-align: center;
+    text-transform: uppercase;
+    background-color: cornflowerblue;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+#card-id {
+    padding: 5px;
+    display: flex;
+}
+
+#card-number{
+    display: inherit;
+    margin-right: 50px;
+}
+
+#card-information {
+    display: flex;
+    padding: 5px;
+}
+
+#card-photo {
+    background: url(https://www.habbo.fr/habbo-imaging/avatarimage?hb=image&user=null&headonly=0&direction=3&head_direction=3&action=&gesture=&size=l) no-repeat, #BFAE99;
+    background-position: center;
+    background-repeat: none;
+    border: solid 2px #000;
+    height: 150px;
+    width: 150px;
+    margin-right: 20px;
+}
+
+#card-detail {
+    display: flex;
+}
+
+.card-box {
+    margin-right: 20px;
+}
+
+#card-code {
+    padding: 5px;
+    background-color: #fff;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    font-style: oblique;
+    color: lightsteelblue;
+}
+
+.id-card-fn pre {
+    position: relative;
+}
+
+.id-card-fn .alert-info {
+    width: 100%;
+    font-weight: 600;    
+}
+
+/* button.fn-id { */
+/*     padding: 0; */
+/*     line-height: 3.4rem; */
+/*     height: 3.4rem; */
+/*     border: 0.4rem solid #0069d9;   */
+/* } */
+
+/* button.fn-id:hover { */
+/*     background-color: #0069d9; */
+/*     border-color: #0069d9; */
+/* } */
+
+#token-secret {
+    color: red;
+    font-size: 15px;
+    font-weight: 400;
+    background: floralwhite;
+}
+
+pre:hover .copy-button {
+    display: block
+}
+
+.copy-button {
+    display: none;
+    position: absolute;
+    top: 9px;
+    right: 9px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    opacity: .5;
+    -webkit-transition: all .15s;
+    transition: all .15s;
+    font-family: Merriweather,Book Antiqua,Georgia,Century Schoolbook,serif;
+    font-size: 14px;
+    line-height: 24px;
+    color: currentColor;
+}
+
+.copy-button:hover {
+    opacity: 1;
+    background: transparent;
+}
+
+.copy-button svg {
+    width: 20px;
+}
+
+.copy-button.clicked {
+    display: block;
+    opacity: 1;
+    background: transparent;
+    color: #408200;
+}
+
+.copy-button.clicked:after {
+    content: "Copied! \2713";
+}
+
+.copy-button.clicked svg {
+    display: none;
+    color: currentColor;
+}
+
+
+

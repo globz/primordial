@@ -1,0 +1,71 @@
+<div class="banner"><h2>Enroll now!</h2></div>
+
+<%= if @live_action == :new do %>
+  <.modal return_to={Routes.enroll_user_index_path(@socket, :index)}>
+    <.live_component
+      module={PrimordialWeb.Enroll.UserLive.FormComponent}
+      id={@user.id || :new}
+      title={@page_title}
+      action={@live_action}
+      user={@user}
+      return_to={Routes.enroll_user_index_path(@socket, :index)}
+    />
+  </.modal>
+  <% end %>
+  
+<div>
+  Register your name with the System if you wish to receive an id
+  card else you can simply close this window and walk away forever.
+</div>
+<br>
+<span>
+<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"
+     fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round"
+     stroke-linejoin="round"><polygon points="14 2 18 6 7 17 3 17 3 13 14 2"></polygon>
+  <line x1="3" y1="22" x2="21" y2="22"></line></svg>
+<%= live_patch "Enroll.", to: Routes.enroll_user_index_path(@socket, :new) %>
+</span>
+
+
+
+<!-- <h1>Listing Users</h1> -->
+
+<!-- <%= if @live_action in [:new, :edit] do %> -->
+<!--   <.modal return_to={Routes.enroll_user_index_path(@socket, :index)}> -->
+<!--     <.live_component -->
+<!--       module={PrimordialWeb.Enroll.UserLive.FormComponent} -->
+<!--       id={@user.id || :new} -->
+<!--       title={@page_title} -->
+<!--       action={@live_action} -->
+<!--       user={@user} -->
+<!--       return_to={Routes.enroll_user_index_path(@socket, :index)} -->
+<!--     /> -->
+<!--   </.modal> -->
+<!-- <% end %> -->
+
+<!-- <table> -->
+<!--   <thead> -->
+<!--     <tr> -->
+<!--       <th>Id card</th> -->
+<!--       <th>Name</th> -->
+
+<!--       <th></th> -->
+<!--     </tr> -->
+<!--   </thead> -->
+<!--   <tbody id="users"> -->
+<!--     <%= for user <- @users do %> -->
+<!--       <tr id={"user-#{user.id}"}> -->
+<!--         <td><%= user.id_card %></td> -->
+<!--         <td><%= user.name %></td> -->
+
+<!--         <td> -->
+<!--           <span><%= live_redirect "Show", to: Routes.enroll_user_show_path(@socket, :show, user) %></span> -->
+<!--           <span><%= live_patch "Edit", to: Routes.enroll_user_index_path(@socket, :edit, user) %></span> -->
+<!--           <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: user.id, data: [confirm: "Are you sure?"] %></span> -->
+<!--         </td> -->
+<!--       </tr> -->
+<!--     <% end %> -->
+<!--   </tbody> -->
+<!-- </table> -->
+
+<!-- <span><%= live_patch "New User", to: Routes.enroll_user_index_path(@socket, :new) %></span> -->
