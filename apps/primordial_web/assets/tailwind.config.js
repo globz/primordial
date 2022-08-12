@@ -24,7 +24,10 @@ module.exports = {
       },
       borderRadius: {
         '4xl': '2rem',
-      }
+      },
+      backgroundImage: {
+        'avatar-ss': "url('/images/avatar_ss.png')",
+      }        
     }
   },
   plugins: [],

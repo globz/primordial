@@ -187,16 +187,6 @@
     100% { opacity: 0; }
 }
 
-#card-photo {
-    background: url(https://www.habbo.fr/habbo-imaging/avatarimage?hb=image&user=null&headonly=0&direction=3&head_direction=3&action=&gesture=&size=l) no-repeat, #BFAE99;
-    background-position: center;
-    background-repeat: none;
-    border: solid 2px #000;
-    height: 150px;
-    width: 150px;
-    margin-right: 20px;
-}
-
 #card-code {
     padding: 5px;
     background-color: #fff;

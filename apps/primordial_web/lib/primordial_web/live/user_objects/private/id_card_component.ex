@@ -24,7 +24,8 @@ defmodule PrimordialWeb.UserObjects.Private.IdCardComponent do
           </div>
         </div>
         <div class="flex p-1.5">
-          <div id="card-photo"></div>
+          <div id="card-photo" 
+          class="rounded-xl bg-avatar-ss w-[195px] h-[180px] bg-center bg-no-repeat bg-contain border-solid border-2 border-white mr-[20px]"></div>
           <div clas="flex">
             <div class="mr-2">
               <p class="font-bold text-xl">
