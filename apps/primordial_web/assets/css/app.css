@@ -187,64 +187,6 @@
     100% { opacity: 0; }
 }
 
-/* id_card - Style the component directly in HTML */
-h1#title,p.info{
-    margin: 0;
-}
-
-h1#title{
-    font-family: monospace;
-    font-weight: lighter;
-    font-size: 25px;
-}
-
-.info {
-    font-family: serif;
-    font-weight: bold;
-}
-
-#id-card p {
-    font-family: ui-monospace;
-    display: inline-block;
-    margin: 5px 1px;
-    font-size: 15px;
-}
-
-#id-card {
-    border: solid 2px #000;
-    border-radius: 10px;
-    box-shadow: 1px 2px 10px #000;
-    background-color: #E9EEF2;
-    margin: auto;
-    width: 80%;
-}
-
-#card-title {
-    padding: 5px;
-    color: #fff;
-    letter-spacing: 2px;
-    text-align: center;
-    text-transform: uppercase;
-    background-color: cornflowerblue;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-}
-
-#card-id {
-    padding: 5px;
-    display: flex;
-}
-
-#card-number{
-    display: inherit;
-    margin-right: 50px;
-}
-
-#card-information {
-    display: flex;
-    padding: 5px;
-}
-
 #card-photo {
     background: url(https://www.habbo.fr/habbo-imaging/avatarimage?hb=image&user=null&headonly=0&direction=3&head_direction=3&action=&gesture=&size=l) no-repeat, #BFAE99;
     background-position: center;
@@ -252,14 +194,6 @@ h1#title{
     border: solid 2px #000;
     height: 150px;
     width: 150px;
-    margin-right: 20px;
-}
-
-#card-detail {
-    display: flex;
-}
-
-.card-box {
     margin-right: 20px;
 }
 
@@ -277,21 +211,9 @@ h1#title{
 }
 
 .id-card-fn .alert-info {
-    width: 100%;
+    width: 80%;
     font-weight: 600;    
 }
-
-/* button.fn-id { */
-/*     padding: 0; */
-/*     line-height: 3.4rem; */
-/*     height: 3.4rem; */
-/*     border: 0.4rem solid #0069d9;   */
-/* } */
-
-/* button.fn-id:hover { */
-/*     background-color: #0069d9; */
-/*     border-color: #0069d9; */
-/* } */
 
 #token-secret {
     color: red;

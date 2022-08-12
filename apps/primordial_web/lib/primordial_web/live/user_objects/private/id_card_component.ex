@@ -14,49 +14,50 @@ defmodule PrimordialWeb.UserObjects.Private.IdCardComponent do
   @impl true
   def render(assigns) do
     ~H"""
-      <div id="id-card">
-        <div id="card-title">
-          <h1 id="title">Simulation Supervisor</h1>
+      <div id="id-card" class="border-solid border-y-2 border-x-2 border-[#000] rounded-xl bg-[#E9EEF2] m-auto shadow-black shadow-md">
+        <div class="bg-[cornflowerblue] text-center text-white tracking-widest uppercase rounded-t-lg p-2">
+          <h1>Simulation Supervisor</h1>
         </div>
-        <div id="card-id">
-          <div id="card-number">
-            <p class="info">ID : <%= @user.id_card %></p>
+        <div class="flex p-1">
+          <div class="ml-1">
+            <p class="text-sm font-bold">ID : <%= @user.id_card %></p>
           </div>
-          <p class="header-info"></p>
         </div>
-        <div id="card-information">
+        <div class="flex p-1.5">
           <div id="card-photo"></div>
-          <div id="card-text">
-            <div id="card-name">
-              <div class="card-box"></div>
-              <p class="info">Name :</p>
-              <p><%= @user.name %></p>
+          <div clas="flex">
+            <div class="mr-2">
+              <p class="font-bold text-xl">
+              Name : <span class="text-md font-light italic"><%= @user.name %></span>
+              </p>                                        
+              <div class="mr-2">
+                <p class="font-bold text-xl">
+                Sex : <span class="text-md font-light italic">Unknown</span>
+                </p>                
+              </div>
+              <div class="mr-2">
+                <p class="font-bold text-xl">
+                Age : <span class="text-md font-light italic">Unknown</span>
+                </p>
+              </div>
+              <div class="mr-2">
+                <p class="font-bold text-xl">
+                SS# : <span class="text-md font-light italic"><%= @user.id %></span>
+                </p>
+              </div>
             </div>
-            <div id="card-detail">
-              <div class="card-box">
-                <p class="info">Sex :</p>
-                <p>M</p>
-              </div>
-              <div class="card-box">
-                <p class="info">Age :</p>
-                <p>33</p>
-              </div>
-              <div class="card-box">
-                <p class="info">SS# : </p>
-                <p><%= @user.id %></p>
-              </div>
-            </div>
-            <div id="card-functions">
-              <div class="card-box"></div>
-              <p class="info">Functions :</p>
-              <p><button type="button" class="btn-primary" phx-click="export" phx-target={@myself}>Export</button></p>
+            <div class="mt-2">
+              <p class="font-bold text-[15px]">Functions :</p>
+              <p>
+              <button type="button" class="btn-primary" phx-click="export" phx-target={@myself}>Export</button>
+              </p>
                <%= if @fn_id == :export do %>
                   <.live_component module={IdCardFunctions.Export} token={@token} id={@user.id} title={@page_title} />
                <% end %>
             </div>
           </div>
         </div>
-        <div id="card-code">
+        <div id="card-code" class="shadow-inner shadow-blue-400">
           (x)[=][#][~][#][~][#][~][#][~][#][~][#][~][#][~][#][~][#][~][#][~][#][~][#][~][#][~][=](x)(*)
         </div>
       </div>
