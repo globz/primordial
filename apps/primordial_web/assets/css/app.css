@@ -191,12 +191,8 @@
     100% { opacity: 0; }
 }
 
-pre:hover .copy-button {
-    display: block
-}
-
+/* Turn this into a component */
 .copy-button {
-    display: none;
     position: absolute;
     top: 9px;
     right: 9px;
@@ -204,18 +200,10 @@ pre:hover .copy-button {
     border: none;
     cursor: pointer;
     padding: 0;
-    opacity: .5;
-    -webkit-transition: all .15s;
-    transition: all .15s;
     font-family: Merriweather,Book Antiqua,Georgia,Century Schoolbook,serif;
     font-size: 14px;
     line-height: 24px;
     color: currentColor;
-}
-
-.copy-button:hover {
-    opacity: 1;
-    background: transparent;
 }
 
 .copy-button svg {
@@ -223,7 +211,7 @@ pre:hover .copy-button {
 }
 
 .copy-button.clicked {
-    display: block;
+    top:-20px;
     opacity: 1;
     background: transparent;
     color: #408200;

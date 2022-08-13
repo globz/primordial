@@ -8,7 +8,7 @@ defmodule PrimordialWeb.UserObjects.IdCardComponent do
     {:ok,
      socket
      |> assign(assigns)
-     |> assign(:fn_id, :none)}     
+     |> assign(fn_id: :none, context: :swipe, page_title: "")}     
   end
   
   @impl true
@@ -23,32 +23,36 @@ defmodule PrimordialWeb.UserObjects.IdCardComponent do
      </div>
        <div id="card-photo" class="avatar bg-avatar-ss mr-[5px]"></div>
        <div class="grow basis-1/5">
-         <p class="font-bold text-[8px] lg:text-xl">
-         Name : <span class="font-light italic"><%= @user.name %></span>
+         <p class="font-bold text-[8px] md:text-sm xl:text-xl">
+         [Name]
          </p>
-         <p class="font-bold text-[8px] lg:text-xl">
-         Sex : <span class="font-light italic">Unknown</span>
+         <span class="font-bold text-[8px] md:text-sm xl:text-xl font-light italic"><%= @user.name %></span>
+         <p class="font-bold text-[8px] md:text-sm xl:text-xl">
+         [Sex] <span class="font-light italic">Unknown</span>
          </p>
-         <p class="font-bold text-[8px] lg:text-xl">
-         Age : <span class="font-light italic">Unknown</span>
+         <p class="font-bold text-[8px] md:text-sm xl:text-xl">
+         [Age] <span class="font-light italic">Unknown</span>
          </p>
-         <p class="font-bold text-[8px] lg:text-xl">
-         SS# : <span class="font-light italic"><%= @user.id %></span>
+         <p class="font-bold text-[8px] md:text-sm xl:text-xl">
+         [SS#] <span class="font-light italic"><%= @user.id %></span>
          </p>
        </div>
        <div class="grow basis-1/5 lg:basis-1/2">
          <p class="font-bold text-[8px] lg:text-[15px]">Functions :</p>
-         <p>
-         <button type="button" class="btn-primary" phx-click="export" phx-target={@myself}>Export</button>
-         </p>
-          <%= if @fn_id == :export do %>
-             <.live_component module={IdCardFunctions.Export} token={@token} id={@user.id} title={@page_title} />
-          <% end %>
+         <.live_component 
+           module={IdCardFunctions.Context} 
+           token={@token} 
+           fn_id={@fn_id} 
+           id={@user.id} 
+           user={@user} 
+           context={@context} 
+           page_title={@page_title} />
        </div>
        <div class="basis-full shadow-inner shadow-blue-400 p-[5px] bg-[#fff] text-[lightsteelblue] italic rounded-b-lg text-center
        portrait:after:content-['(x)[=][#][~][=][#][~][=][#][~](x)']
-       landscape:after:content-['(x)[=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~](x)']
-       landscape:lg:after:content-['(x)[=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~](x)']">
+       landscape:md:after:content-['(x)[=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~](x)']
+       landscape:lg:after:content-['(x)[=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~](x)']
+       landscape:xl:after:content-['(x)[=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~](x)']">
        </div>
     </div>
     """
@@ -61,7 +65,13 @@ defmodule PrimordialWeb.UserObjects.IdCardComponent do
   end
 
   @impl true
+  def handle_event("boot-up", _assigns, socket) do    
+    IO.inspect(socket)    
+    {:noreply, assign(socket, fn_id: :boot_up)}
+  end  
+
+  @impl true
   def handle_event("close", _assigns, socket) do
     {:noreply, assign(socket, :fn_id, :none)}
-  end  
+  end
 end

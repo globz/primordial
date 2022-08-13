@@ -28,7 +28,12 @@ module.exports = {
       backgroundImage: {
         'avatar-ss': "url('/images/avatar_ss.png')",
       }        
-    }
+    },
+    variants: {
+        extend: {
+            visibility: ["group-hover"],
+        },
+    },
   },
   plugins: [],
 }
