@@ -49,6 +49,10 @@
     .banner {
         @apply text-center border-b-4 bg-[#eee] border-[#e3e3e3] rounded-md font-extralight text-lg mb-5;
     }
+
+    .avatar {
+        @apply rounded-xl  w-[120px] h-[110px] lg:w-[175px] lg:h-[160px] bg-center bg-no-repeat bg-contain border-solid border-2 border-white bg-[#000] hover:scale-150 transform-gpu;
+    }
 }
 
 /* Alerts and form errors used by phx.new */
@@ -185,31 +189,6 @@
 @keyframes fade-out-keys{
     0% { opacity: 1; }
     100% { opacity: 0; }
-}
-
-#card-code {
-    padding: 5px;
-    background-color: #fff;
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
-    font-style: oblique;
-    color: lightsteelblue;
-}
-
-.id-card-fn pre {
-    position: relative;
-}
-
-.id-card-fn .alert-info {
-    width: 80%;
-    font-weight: 600;    
-}
-
-#token-secret {
-    color: red;
-    font-size: 15px;
-    font-weight: 400;
-    background: floralwhite;
 }
 
 pre:hover .copy-button {

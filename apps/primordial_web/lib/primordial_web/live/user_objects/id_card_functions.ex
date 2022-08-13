@@ -1,4 +1,4 @@
-defmodule PrimordialWeb.UserObjects.Private.IdCardFunctions.Export do
+defmodule PrimordialWeb.UserObjects.IdCardFunctions.Export do
   use PrimordialWeb, :live_component
 
   @impl true
@@ -14,18 +14,23 @@ defmodule PrimordialWeb.UserObjects.Private.IdCardFunctions.Export do
     ~H"""
     <div>
      <.id_card_fn_modal>
-      <h2><%= @title %></h2>
-      <p class="alert alert-info" role="alert">
+      <h2 class="basis-full pb-2"><%= @title %></h2>
+      <div class="basis-full alert alert-info text-center md:text-left font-semibold" role="alert">
+      <p>
       The following Token is a secret string which authenticate you with the
       Primordial Simulation Project.
-      <br>
+      </p>
+      <p>
       Copy and store this Token in a text document for future reference.
-      <br>
+      </p>
+      <p>
       You may import this Token to another device or browser.
       </p>
-      <pre>
+      </div>
+      <pre class="basis-full relative text-ellipsis overflow-hidden text-sm md:text-[15px] font-bold bg-[floralwhite]">
       <.clipboard_button copy_from={@copy_from} />
-      <code id="token-secret"><%= @token %></code>
+      <br>
+      <code id="token-secret" class="text-red-600"><%= @token %></code>
       </pre>
      </.id_card_fn_modal>
     </div>
@@ -33,7 +38,7 @@ defmodule PrimordialWeb.UserObjects.Private.IdCardFunctions.Export do
   end  
 end
 
-defmodule PrimordialWeb.UserObjects.Private.IdCardFunctions.Show do
+defmodule PrimordialWeb.UserObjects.IdCardFunctions.Show do
   use PrimordialWeb, :live_component
 
   @impl true

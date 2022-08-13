@@ -8,7 +8,7 @@ defmodule PrimordialWeb.SwipeLive do
     ~H"""
       <%= if @view_to_show == :authenticated do %>
            <.live_component
-             module={PrimordialWeb.UserObjects.Private.IdCardComponent}
+             module={PrimordialWeb.UserObjects.IdCardComponent}
              id={@user.id}
              action={@live_action}
              user={@user}
