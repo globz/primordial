@@ -65,15 +65,38 @@ end
 
 defmodule PrimordialWeb.UserObjects.IdCardFunctions.BootUp do
   use PrimordialWeb, :live_component
-
+  
   @impl true
   def render(assigns) do
     ~H"""
     <div>
      <.id_card_fn_modal>
-      <h2>Booting up...</h2>
+      <h2 class="basis-full pb-2"><%= @title %></h2>
+      <%= for step <- boot_seq do %>
+       <p class="text-bold text-orange-500 basis-full pb-2"><%= step %></p>
+       <br>
+      <% end %>
+      <p class="text-green-500 basis-full pb-2">Booting sequence complete.</p>
+      <p class="basis-full pb-2"><%= live_patch "[Sign-in]", to: Routes.enroll_user_index_path(@socket, :new) %></p>
      </.id_card_fn_modal>
     </div>
     """
+  end
+
+  def boot_seq() do
+    steps = [{Enum.random(1..5), "Initializing OS..."},
+             {Enum.random(1..7), "Allocating memory..."},
+             {Enum.random(1..3), "Calculating..."},
+             {Enum.random(1..2), "Insufficient memory..."},
+             {Enum.random(1..4), "Rebooting..."},
+             {Enum.random(1..2), "User profile corrupted..."},
+             {Enum.random(1..2), "Restoring session from backup..."}]
+    
+    steps
+      |> Enum.map(fn ({weight, step}) -> 
+      List.duplicate(step, weight)
+    end)
+    |> Enum.take_random(2)
+    |> List.flatten
   end  
 end

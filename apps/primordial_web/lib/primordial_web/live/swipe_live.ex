@@ -13,6 +13,7 @@ defmodule PrimordialWeb.SwipeLive do
              action={@live_action}
              user={@user}
              token={@token}
+             context={@context}
            />
       <% else %>
         If you previously exported your authentication Token, you may
@@ -29,7 +30,11 @@ defmodule PrimordialWeb.SwipeLive do
     IO.inspect(socket)
     case Accounts.Token.verify(PrimordialWeb.Endpoint, token) do
       {:ok, user_id} ->
-        {:ok, assign(socket, user: Accounts.get_user!(user_id), token: token, view_to_show: :authenticated)}    
+        {:ok, assign(socket,
+            user: Accounts.get_user!(user_id),
+            token: token,
+            view_to_show: :authenticated,
+            context: :swipe)}    
 
       {:error, :expired} ->
         {:ok, assign(socket, error: "This ID card has expired!", view_to_show: :error)}
@@ -48,14 +53,12 @@ defmodule PrimordialWeb.SwipeLive do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
-  defp apply_action(socket, :authenticate, _params) do
-    %{assigns: assigns} = socket
-    IO.inspect(assigns)
-    case assigns do
+  defp apply_action(socket, :authenticate, _params) do    
+    case %{assigns: assigns} = socket do
       %{error: error} ->
         put_flash(socket, :error, "#{error}")
 
-      _ ->
+      _ ->        
         put_flash(socket, :info, "Authentication successful!")
     end
   end

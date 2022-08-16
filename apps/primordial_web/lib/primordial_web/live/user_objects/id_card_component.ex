@@ -5,10 +5,11 @@ defmodule PrimordialWeb.UserObjects.IdCardComponent do
 
   @impl true
   def update(assigns, socket) do
+    IO.inspect(assigns)
     {:ok,
      socket
      |> assign(assigns)
-     |> assign(fn_id: :none, context: :swipe, page_title: "")}     
+     |> assign(fn_id: :none, page_title: "")}
   end
   
   @impl true
@@ -67,7 +68,7 @@ defmodule PrimordialWeb.UserObjects.IdCardComponent do
   @impl true
   def handle_event("boot-up", _assigns, socket) do    
     IO.inspect(socket)    
-    {:noreply, assign(socket, fn_id: :boot_up)}
+    {:noreply, assign(socket, fn_id: :boot_up, page_title: "fn_id: :boot_up")}
   end  
 
   @impl true
