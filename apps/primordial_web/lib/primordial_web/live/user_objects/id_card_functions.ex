@@ -71,32 +71,78 @@ defmodule PrimordialWeb.UserObjects.IdCardFunctions.BootUp do
     ~H"""
     <div>
      <.id_card_fn_modal>
-      <h2 class="basis-full pb-2"><%= @title %></h2>
-      <%= for step <- boot_seq do %>
-       <p class="text-bold text-orange-500 basis-full pb-2"><%= step %></p>
+      <h2 class="basis-full pb-2">
+      <%= @title %> <span class="text-red-500">[alpha]</span>
+      </h2>
+      <div class="bg-black rounded w-full p-2">
+      <%= for step <- boot_seq() do %>
+       <p class="text-bold text-orange-600 basis-full pb-2"><%= step %></p>
+
+       <%= if step == "OS Ready." do %>
        <br>
+       <p class="text-green-500 basis-full pb-2">Booting sequence complete.</p>
+       <div id="card-photo" class="avatar bg-avatar-ss mr-[5px]"></div>
+       <p class="basis-full pb-2"><%= live_patch "[Sign-in]", to: Routes.enroll_user_index_path(@socket, :new) %></p>
+       <% end %>       
+
       <% end %>
-      <p class="text-green-500 basis-full pb-2">Booting sequence complete.</p>
-      <p class="basis-full pb-2"><%= live_patch "[Sign-in]", to: Routes.enroll_user_index_path(@socket, :new) %></p>
+      </div>
      </.id_card_fn_modal>
     </div>
     """
   end
 
   def boot_seq() do
-    steps = [{Enum.random(1..5), "Initializing OS..."},
-             {Enum.random(1..7), "Allocating memory..."},
-             {Enum.random(1..3), "Calculating..."},
-             {Enum.random(1..2), "Insufficient memory..."},
-             {Enum.random(1..4), "Rebooting..."},
-             {Enum.random(1..2), "User profile corrupted..."},
-             {Enum.random(1..2), "Restoring session from backup..."}]
+
+    steps = [[message: "Loading BIOS...", weight: Enum.random(1..5)],
+             [message: "POST...", weight: Enum.random(1..5)],
+             [message: "Initializing first-stage boot loader...", weight: Enum.random(1..3)],
+             [message: "Chain loading boot loaders...", weight: Enum.random(1..3)],
+             [message: "Calculating...", weight: Enum.random(1..3)],
+             [message: "Allocating memory...", weight: Enum.random(1..6)],
+             [message: "Initializing OS...", weight: Enum.random(1..5)],
+             [message: "Insufficient memory...", weight: Enum.random(1..2)],
+             [message: "Rebooting...", weight: Enum.random(1..4)],
+             [message: "Loading System Configuration...", weight: Enum.random(1..3)],
+             [message: "Loading System Utilities...", weight: Enum.random(1..3)],
+             [message: "Loading User Session...", weight: Enum.random(1..3)],
+             [message: "User Profile corrupted...", weight: Enum.random(1..3)],
+             [message: "Restoring User Profile from backup...", weight: Enum.random(1..2)],
+             [message: "OS Ready.", weight: Enum.random(1..1)]]
+
+    weighted_steps = Enum.map(steps, fn step -> List.duplicate(step[:message], step[:weight]) end)
+
+    ranked_steps = Enum.zip([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], steps |> Enum.map(fn step -> List.duplicate(step[:message], step[:weight]) end))
+
+    # random selection of ranked_steps
+    Enum.take_random(ranked_steps
+    |> Enum.map(fn {rank, message} ->
+        {[rank, Enum.take_random(message, 15)]} end), 4)     
+        |> List.keysort(0)
+        |> Enum.map(fn {[_rank, message]} -> message end)
+        |> List.flatten
+     
+    # steps = [{1, Enum.random(1..3), "Loading BIOS..."},
+    #          {2, Enum.random(1..5), "POST..."},
+    #          {3, Enum.random(1..3), "Initializing first-stage boot loader..."},
+    #          {4, Enum.random(1..3), "Chain loading boot loaders..."},
+    #          {5, Enum.random(1..3), "Calculating..."},
+    #          {6, Enum.random(1..7), "Allocating memory..."},
+    #          {7, Enum.random(1..5), "Initializing OS..."},
+    #          {8, Enum.random(1..2), "Insufficient memory..."},             
+    #          {9, Enum.random(1..4), "Rebooting..."},
+    #          {10, Enum.random(1..3), "Loading System Configuration..."},
+    #          {11, Enum.random(1..3), "Loading System Utilities..."},
+    #          {12, Enum.random(1..3), "Loading User Session..."},
+    #          {13, Enum.random(1..2), "User profile corrupted..."},
+    #          {14, Enum.random(1..2), "Restoring User profile from backup..."},                                              
+    #          {15, Enum.random(1..1), "OS Ready."}]
     
-    steps
-      |> Enum.map(fn ({weight, step}) -> 
-      List.duplicate(step, weight)
-    end)
-    |> Enum.take_random(2)
-    |> List.flatten
+    # steps
+    #   |> Enum.map(fn ({order, weight, step}) -> 
+    #   List.duplicate([order, step], weight)
+    # end)
+    # |> Enum.take_random(2)
+    # |> List.flatten
   end  
 end
