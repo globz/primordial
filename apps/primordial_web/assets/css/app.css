@@ -51,7 +51,7 @@
     }
 
     .avatar {
-        @apply rounded-xl  w-[120px] h-[110px] lg:w-[175px] lg:h-[160px] bg-center bg-no-repeat bg-contain border-solid border-2 border-white bg-[#000] hover:scale-150 transform-gpu;
+        @apply rounded-xl  w-[120px] h-[110px] lg:w-[174px] lg:h-[160px] bg-center bg-no-repeat bg-contain border-solid border-2 border-white bg-white hover:scale-150 transform-gpu;
     }
 }
 

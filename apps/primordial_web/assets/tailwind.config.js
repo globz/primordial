@@ -27,6 +27,7 @@ module.exports = {
       },
       backgroundImage: {
         'avatar-ss': "url('/images/avatar_ss.png')",
+        'avatar-soup-os': "url('/images/avatar_soup_os.png')",
       }        
     },
     variants: {
