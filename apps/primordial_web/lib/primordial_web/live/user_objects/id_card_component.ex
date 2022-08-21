@@ -29,10 +29,10 @@ defmodule PrimordialWeb.UserObjects.IdCardComponent do
          </p>
          <span class="font-bold text-[8px] md:text-sm xl:text-xl font-light italic"><%= @user.name %></span>
          <p class="font-bold text-[8px] md:text-sm xl:text-xl">
-         [Sex] <span class="font-light italic">Unknown</span>
+         [Title] <span class="font-light italic">Assistant</span>
          </p>
          <p class="font-bold text-[8px] md:text-sm xl:text-xl">
-         [Age] <span class="font-light italic">Unknown</span>
+         [Profession] <span class="font-light italic">None</span>
          </p>
          <p class="font-bold text-[8px] md:text-sm xl:text-xl">
          [SS#] <span class="font-light italic"><%= @user.id %></span>
@@ -66,7 +66,7 @@ defmodule PrimordialWeb.UserObjects.IdCardComponent do
   end
 
   @impl true
-  def handle_event("boot-up", _assigns, socket) do    
+  def handle_event("boot_up", _assigns, socket) do    
     IO.inspect(socket)    
     {:noreply, assign(socket, fn_id: :boot_up, page_title: "fn_id: :boot_up")}
   end  
@@ -74,5 +74,13 @@ defmodule PrimordialWeb.UserObjects.IdCardComponent do
   @impl true
   def handle_event("close", _assigns, socket) do
     {:noreply, assign(socket, :fn_id, :none)}
+  end
+
+  def handle_event("close_with_key", %{"key" => "Escape"}, socket) do
+    {:noreply, assign(socket, :fn_id, :none)}
+  end
+
+  def handle_event("close_with_key", _, socket) do
+    {:noreply, socket}
   end
 end

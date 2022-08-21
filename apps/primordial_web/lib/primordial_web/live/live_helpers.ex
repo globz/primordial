@@ -82,7 +82,7 @@ defmodule PrimordialWeb.LiveHelpers do
     ~H"""
     <div id="modal" class="phx-modal fade-in id-card-fn">
      <div id="modal-content" class="phx-modal-content fade-in-scale flex flex-row flex-wrap w-full lg:w-[80%]">
-      <a id="close" href="#" class="basis-full phx-modal-close text-right" phx-click="close" phx-target="#id-card">✖</a>
+      <a id="close" href="#" class="basis-full phx-modal-close text-right" phx-click="close" phx-window-keyup="close_with_key" phx-target="#id-card">✖</a>
       <%= render_slot(@inner_block) %>
      </div>
     </div>
