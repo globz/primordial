@@ -81,7 +81,7 @@ defmodule PrimordialWeb.UserObjects.IdCardFunctions.BootUp do
        <%= if step == "Soup OS Ready." do %>
        <br>
        <p class="text-green-500 basis-full pb-2">Booting sequence complete.</p>
-       <p class="text-green-500 basis-full pb-2">You may now taste the primordial <%= live_patch "[Soup]", to: Routes.enroll_user_index_path(@socket, :new) %></p>
+       <p class="text-green-500 basis-full pb-2">You may now taste the Primordial <%= live_patch "[Soup]", to: Routes.enroll_user_index_path(@socket, :new) %></p>
        <div id="card-photo" class="mt-2 avatar bg-avatar-soup-os mr-[5px]"></div>       
        <% end %>       
 
@@ -110,12 +110,11 @@ defmodule PrimordialWeb.UserObjects.IdCardFunctions.BootUp do
              [message: "Restoring User Profile from backup...", weight: Enum.random(1..2)],
              [message: "Soup OS Ready.", weight: Enum.random(1..1)]]
 
-    weighted_steps = Enum.map(steps, fn step -> List.duplicate(step[:message], step[:weight]) end)
+    # Weighted and ranked steps
+    weigthed_ranked_steps = Enum.zip([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], steps |> Enum.map(fn step -> List.duplicate(step[:message], step[:weight]) end))
 
-    ranked_steps = Enum.zip([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], steps |> Enum.map(fn step -> List.duplicate(step[:message], step[:weight]) end))
-
-    # random selection of ranked_steps
-    Enum.take_random(ranked_steps
+    # Random selection of weigthed_ranked_steps
+    Enum.take_random(weigthed_ranked_steps
     |> Enum.map(fn {rank, message} ->
         {[rank, Enum.take_random(message, 15)]} end), 5)     
         |> List.keysort(0)
