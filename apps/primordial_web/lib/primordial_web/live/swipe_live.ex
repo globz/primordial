@@ -33,18 +33,18 @@ defmodule PrimordialWeb.SwipeLive do
             user: Accounts.get_user!(user_id),
             token: token,
             view_to_show: :authenticated,
-            context: :swipe)}    
+            context: :swipe)}
 
       {:error, :expired} ->
         {:ok, assign(socket, error: "This ID card has expired!", view_to_show: :error)}
 
       {:error, :invalid} ->
-        {:ok, assign(socket, error: "There is something wrong with your ID card!", view_to_show: :error)}        
+        {:ok, assign(socket, error: "There is something wrong with your ID card!", view_to_show: :error)}
     end
   end
 
   def mount(_params, %{}, socket) do    
-    {:ok, assign(socket, error: "You do not own an ID card, you must enroll first.", view_to_show: :error)}    
+    {:ok, assign(socket, error: "You do not own an ID card, you must enroll first.", view_to_show: :error)}
   end  
 
   @impl true
@@ -64,5 +64,5 @@ defmodule PrimordialWeb.SwipeLive do
 
   @impl true
   def handle_info({:user_id, user_id, view_to_show}, socket),
-    do: {:noreply, assign(socket, user_id: user_id, view_to_show: view_to_show)}  
+    do: {:noreply, assign(socket, user_id: user_id, view_to_show: view_to_show)}
 end

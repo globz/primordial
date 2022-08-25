@@ -32,7 +32,7 @@ defmodule PrimordialWeb.UserObjects.IdCardFunctions.Export do
      socket
      |> assign(assigns)
      |> assign(:copy_from, "#token-secret")}
-  end    
+  end
   
   @impl true
   def render(assigns) do
@@ -121,5 +121,5 @@ defmodule PrimordialWeb.UserObjects.IdCardFunctions.BootUp do
         |> List.keysort(0)
         |> Enum.map(fn {[_rank, message]} -> message end)
         |> List.flatten
-  end  
+  end
 end
