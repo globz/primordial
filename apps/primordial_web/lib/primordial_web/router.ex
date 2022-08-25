@@ -16,13 +16,13 @@ defmodule PrimordialWeb.Router do
 
   scope "/", PrimordialWeb do
     pipe_through :browser
-    # create plug to verify token automatically
     
     get "/session/:token", SessionController, :create
 
     live "/", PageLive, :index
     live "/swipe", SwipeLive, :authenticate
     live "/import", ImportLive, :import
+    live "/soup", SoupLive, :sign_in
   end
 
   scope "/enroll", PrimordialWeb.Enroll, as: :enroll do

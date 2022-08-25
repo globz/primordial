@@ -31,7 +31,7 @@ defmodule PrimordialWeb.UserObjects.IdCardFunctions.Export do
     {:ok,
      socket
      |> assign(assigns)
-     |> assign(:copy_from, "#token-secret")}     
+     |> assign(:copy_from, "#token-secret")}
   end    
   
   @impl true
@@ -81,7 +81,8 @@ defmodule PrimordialWeb.UserObjects.IdCardFunctions.BootUp do
        <%= if step == "Soup OS Ready." do %>
        <br>
        <p class="text-green-500 basis-full pb-2">Booting sequence complete.</p>
-       <p class="text-green-500 basis-full pb-2">You may now taste the Primordial <%= live_patch "[Soup]", to: Routes.enroll_user_index_path(@socket, :new) %></p>
+       <p class="text-green-500 basis-full pb-2">You may now taste the
+       Primordial <%= live_redirect "[Soup]", to: Routes.soup_path(@socket, :sign_in) %></p>
        <div id="card-photo" class="mt-2 avatar bg-avatar-soup-os mr-[5px]"></div>       
        <% end %>       
 
@@ -93,7 +94,7 @@ defmodule PrimordialWeb.UserObjects.IdCardFunctions.BootUp do
   end
 
   def boot_seq() do
-
+    
     steps = [[message: "Loading BIOS...", weight: Enum.random(1..5)],
              [message: "POST...", weight: Enum.random(1..5)],
              [message: "Initializing first-stage boot loader...", weight: Enum.random(1..3)],

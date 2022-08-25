@@ -61,13 +61,11 @@ defmodule PrimordialWeb.UserObjects.IdCardComponent do
 
   @impl true
   def handle_event("export", _assigns, socket) do    
-    IO.inspect(socket)    
     {:noreply, assign(socket, fn_id: :export, page_title: "fn_id: :export")}
   end
 
   @impl true
   def handle_event("boot_up", _assigns, socket) do    
-    IO.inspect(socket)    
     {:noreply, assign(socket, fn_id: :boot_up, page_title: "fn_id: :boot_up")}
   end  
 
