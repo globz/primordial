@@ -27,7 +27,6 @@ defmodule PrimordialWeb.SwipeLive do
   
   @impl true
   def mount(_params, %{"token" => token}, socket) do
-    IO.inspect(socket)
     case Accounts.Token.verify(PrimordialWeb.Endpoint, token) do
       {:ok, user_id} ->
         {:ok, assign(socket,
@@ -53,12 +52,12 @@ defmodule PrimordialWeb.SwipeLive do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
-  defp apply_action(socket, :authenticate, _params) do    
-    case %{assigns: assigns} = socket do
+  defp apply_action(socket, :authenticate, _params) do
+    case socket.assigns do
       %{error: error} ->
         put_flash(socket, :error, "#{error}")
 
-      _ ->        
+      _ ->
         put_flash(socket, :info, "Authentication successful!")
     end
   end
