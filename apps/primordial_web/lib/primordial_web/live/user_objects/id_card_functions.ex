@@ -1,6 +1,7 @@
 defmodule PrimordialWeb.UserObjects.IdCardFunctions.Context do
   use PrimordialWeb, :live_component
   alias PrimordialWeb.UserObjects.IdCardFunctions
+
   
   @impl true
   def render(assigns) do
@@ -75,22 +76,16 @@ defmodule PrimordialWeb.UserObjects.IdCardFunctions.BootUp do
 
   @impl true
   def update(assigns, socket) do
+    seq = boot_seq()
     {:ok,
      socket
      |> assign(assigns)
-     |> assign(:soup_os_state, :offline)
-     |> assign(:seq, boot_seq())}
+     |> assign(:seq, seq)
+     |> assign(:soup_state, soup_state(seq))}
   end
   
   @impl true
   def render(assigns) do
-    # IO.inspect(assigns)
-    # Enum.member?(assigns.seq, "Soup OS Ready.")
-    # assigns = update(assigns, :soup_os_state, fn _state -> :online end)
-    # IO.inspect(assigns.seq)
-    # IO.inspect(assigns)
-
-    #<%= for step <- boot_seq() do %>    
     ~H"""
     <div>
      <.id_card_fn_modal>
@@ -104,8 +99,8 @@ defmodule PrimordialWeb.UserObjects.IdCardFunctions.BootUp do
        <br>
        <p class="text-green-500 basis-full pb-2">Booting sequence complete.</p>
        <p class="text-green-500 basis-full pb-2">You may now taste the
-       Primordial <%= live_redirect "[Soup]", to: Routes.soup_path(@socket, :sign_in) %></p>
-       <div id="card-photo" class="mt-2 avatar bg-avatar-soup-os mr-[5px]"></div>       
+       Primordial <%= live_redirect "[Soup]", to: Routes.session_path(@socket, :update_soup_state, @soup_state) %></p>
+       <div id="card-photo" class="mt-2 avatar bg-avatar-soup-os mr-[5px]"></div>
        <% end %>       
 
       <% end %>
@@ -115,10 +110,7 @@ defmodule PrimordialWeb.UserObjects.IdCardFunctions.BootUp do
     """    
   end
 
-  def boot_seq() do
-
-    # assigns = update(assigns, :soup_os_state, fn _state -> :online end)
-    # IO.inspect(assigns)
+  defp boot_seq() do
     
     steps = [[message: "Loading BIOS...", weight: Enum.random(1..5)],
              [message: "POST...", weight: Enum.random(1..5)],
@@ -146,5 +138,15 @@ defmodule PrimordialWeb.UserObjects.IdCardFunctions.BootUp do
         |> List.keysort(0)
         |> Enum.map(fn {[_rank, message]} -> message end)
         |> List.flatten
+  end
+
+  defp soup_state(seq) do        
+    # Update Soup OS state if boot seq is successful
+    case Enum.member?(seq, "Soup OS Ready.") do
+      true ->
+        "online"
+      false ->
+        "offline"
+    end
   end
 end

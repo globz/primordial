@@ -18,11 +18,18 @@ defmodule PrimordialWeb.Router do
     pipe_through :browser
     
     get "/session/:token", SessionController, :create
+    get "/session/soup/:state", SessionController, :update_soup_state
 
+    
     live "/", PageLive, :index
     live "/swipe", SwipeLive, :authenticate
     live "/import", ImportLive, :import
     live "/soup", SoupLive, :sign_in
+    
+    # live_session :authenticated, on_mount: {PrimordialWeb.InitAssigns, :authenticated} do
+    #   live "/swipe", SwipeLive, :authenticate
+    #   live "/soup", SoupLive, :sign_in
+    # end
   end
 
   scope "/enroll", PrimordialWeb.Enroll, as: :enroll do
@@ -35,10 +42,6 @@ defmodule PrimordialWeb.Router do
     live "/users/:id", UserLive.Show, :show
     live "/users/:id/show/edit", UserLive.Show, :edit
   end
-
-  # scope "/id_card", PrimordialWeb.UserObjects, as: :fn do
-  #   live "/fn/export", Private.IdCardLive, :export
-  # end
   
   # Other scopes may use custom stacks.
   # scope "/api", PrimordialWeb do
