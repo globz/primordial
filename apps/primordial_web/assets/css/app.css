@@ -54,11 +54,16 @@
         @apply rounded-xl  w-[120px] h-[110px] lg:w-[175px] lg:h-[160px] bg-center bg-no-repeat bg-contain border-solid border-2 border-white bg-white hover:scale-150 transform-gpu;
     }
 
-    .os-icon {
-        @apply rounded-xl  w-[70px] h-[60px] lg:w-[80px] lg:h-[70px] bg-center
-        bg-no-repeat bg-contain border-solid border-2 border-white bg-black
-        hover:scale-75 transform-gpu mx-2 mt-2;
+    .soup-os-icon {
+        @apply rounded-xl  w-[60px] h-[60px] lg:w-[70px] lg:h-[70px] bg-center
+        bg-no-repeat bg-contain border-double border-x-4 border-y-4 border-black bg-white
+        bg-clip-content shadow-xl lg:shadow-2xl shadow-indigo-500/50 hover:scale-75 transform-gpu mx-2 mt-2 ring-2 ring-indigo-600;
     }
+
+    .soup-os-bg-base {
+        @apply basis-full rounded-4xl bg-no-repeat bg-center bg-cover bg-origin-border max-w-full max-h-full lg:h-[95vh];
+    }
+
 }
 
 /* Alerts and form errors used by phx.new */

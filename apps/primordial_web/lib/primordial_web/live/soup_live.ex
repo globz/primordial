@@ -6,15 +6,12 @@ defmodule PrimordialWeb.SoupLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="flex flex-row flex-wrap border-solid border-4
-    border-indigo-600 rounded-4xl h-[80vh] lg:h-[95vh] max-w-full
-    bg-[steelblue]">
-    <div class="basis-full rounded-4xl bg-soup-os-bg-2 bg-no-repeat bg-center
-    bg-cover bg-origin-border max-w-full max-h-full lg:h-[95vh]">
-     <div class="basis-full p-1 ml-1">
-     <div id="os-icon" class="flex os-icon bg-id-card-icon mr-[5px]"></div>
-     </div>
-    </div>
+    <div class="flex flex-row grow basis-1/5 lg:basis-1/2 p-2 ml-1 pt-16
+    self-center justify-center">
+     <div id="os-icon" class="flex soup-os-icon bg-id-card-icon mr-[5px]"></div>
+     <div id="os-icon" class="flex soup-os-icon bg-entangle-icon mr-[5px]"></div>
+     <div id="os-icon" class="flex soup-os-icon bg-id-card-icon mr-[5px]"></div>
+     <div id="os-icon" class="flex soup-os-icon bg-id-card-icon mr-[5px]"></div>
     </div>
     """
   end
@@ -26,7 +23,8 @@ defmodule PrimordialWeb.SoupLive do
         socket = assign(socket,
         user: Accounts.get_user!(user_id),
         token: token,
-        soup_state: state)
+        soup_state: state,
+        bg: select_bg())
         {:ok, socket, layout: {PrimordialWeb.LayoutView, "soup.html"}}
         
       {:error, :expired} ->
@@ -66,9 +64,19 @@ defmodule PrimordialWeb.SoupLive do
         |> redirect(to: Routes.page_path(socket, :index))
 
       _ ->
-        Process.send_after(self(), :clear_flash, 5000)
+        #Process.send_after(self(), :clear_flash, 5000)
         check_soup_state(socket, socket.assigns.soup_state)
     end
+  end
+
+  defp select_bg() do
+    bg = [
+      "bg-soup-os-bg-1",
+      "bg-soup-os-bg-2"
+    ]    
+    rand_bg = Enum.random(0..1)
+    selected_bg = Enum.at(bg, rand_bg)
+    "soup-os-bg-base #{selected_bg}"
   end
 
   @impl true
