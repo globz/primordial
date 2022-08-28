@@ -1,6 +1,5 @@
 defmodule PrimordialWeb.SoupLive do
-  #use PrimordialWeb, :live_view 
-  use Phoenix.LiveView, layout: {PrimordialWeb.LayoutView, "soup.html"}
+  use PrimordialWeb, :live_view 
   
   alias Primordial.Accounts
 
@@ -8,24 +7,28 @@ defmodule PrimordialWeb.SoupLive do
   def render(assigns) do
     ~H"""
     <div class="flex flex-row flex-wrap border-solid border-4
-    border-indigo-600 rounded-lg h-[80vh] lg:h-[95vh] max-w-full
-    bg-soup-os-bg-1 bg-repeat bg-cover bg-center bg-[scale-125]">
+    border-indigo-600 rounded-4xl h-[80vh] lg:h-[95vh] max-w-full
+    bg-[steelblue]">
+    <div class="basis-full rounded-4xl bg-soup-os-bg-2 bg-no-repeat bg-center
+    bg-cover bg-origin-border max-w-full max-h-full lg:h-[95vh]">
      <div class="basis-full p-1 ml-1">
-       <div id="os-icon" class="flex os-icon bg-id-card-icon mr-[5px]"></div>
+     <div id="os-icon" class="flex os-icon bg-id-card-icon mr-[5px]"></div>
      </div>
+    </div>
     </div>
     """
   end
   
   @impl true
-  def mount(_params, %{"token" => token, "soup_state" => state} = session, socket) do        
+  def mount(_params, %{"token" => token, "soup_state" => state}, socket) do        
     case Accounts.Token.verify(PrimordialWeb.Endpoint, token) do
       {:ok, user_id} ->
-        {:ok, assign(socket,
-            user: Accounts.get_user!(user_id),
-            token: token,
-            soup_state: state)}
-
+        socket = assign(socket,
+        user: Accounts.get_user!(user_id),
+        token: token,
+        soup_state: state)
+        {:ok, socket, layout: {PrimordialWeb.LayoutView, "soup.html"}}
+        
       {:error, :expired} ->
         {:ok, assign(socket, error: "This ID card has expired!")}
 

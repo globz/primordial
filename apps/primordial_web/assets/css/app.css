@@ -57,7 +57,7 @@
     .os-icon {
         @apply rounded-xl  w-[70px] h-[60px] lg:w-[80px] lg:h-[70px] bg-center
         bg-no-repeat bg-contain border-solid border-2 border-white bg-black
-        hover:scale-150 transform-gpu mx-2 mt-2;
+        hover:scale-75 transform-gpu mx-2 mt-2;
     }
 }
 
