@@ -43,7 +43,7 @@
     }
 
     .container {
-        @apply my-0 m-auto bg-white max-w-screen-xl px-8 relative w-full;
+        @apply my-0 m-auto bg-white relative w-full h-full px-8;
     }
 
     .banner {
@@ -53,6 +53,12 @@
     .avatar {
         @apply rounded-xl  w-[120px] h-[110px] lg:w-[175px] lg:h-[160px] bg-center bg-no-repeat bg-contain border-solid border-2 border-white bg-white hover:scale-150 transform-gpu;
     }
+
+    .os-icon {
+        @apply rounded-xl  w-[70px] h-[60px] lg:w-[80px] lg:h-[70px] bg-center
+        bg-no-repeat bg-contain border-solid border-2 border-white bg-black
+        hover:scale-150 transform-gpu mx-2 mt-2;
+    }
 }
 
 /* Alerts and form errors used by phx.new */
@@ -61,6 +67,7 @@
     margin-bottom: 20px;
     border: 1px solid transparent;
     border-radius: 4px;
+    text-align: center;
 }
 
 .alert-info {

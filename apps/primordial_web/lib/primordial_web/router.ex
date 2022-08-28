@@ -24,7 +24,7 @@ defmodule PrimordialWeb.Router do
     live "/", PageLive, :index
     live "/swipe", SwipeLive, :authenticate
     live "/import", ImportLive, :import
-    live "/soup", SoupLive, :sign_in
+    live "/soup", SoupLive, :sign_in 
     
     # live_session :authenticated, on_mount: {PrimordialWeb.InitAssigns, :authenticated} do
     #   live "/swipe", SwipeLive, :authenticate

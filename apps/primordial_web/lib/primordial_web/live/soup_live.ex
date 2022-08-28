@@ -1,12 +1,19 @@
 defmodule PrimordialWeb.SoupLive do
-  use PrimordialWeb, :live_view
-
+  #use PrimordialWeb, :live_view 
+  use Phoenix.LiveView, layout: {PrimordialWeb.LayoutView, "soup.html"}
+  
   alias Primordial.Accounts
 
   @impl true
   def render(assigns) do
     ~H"""
-    Soup OS.
+    <div class="flex flex-row flex-wrap border-solid border-4
+    border-indigo-600 rounded-lg h-[80vh] lg:h-[95vh] max-w-full
+    bg-soup-os-bg-1 bg-repeat bg-cover bg-center bg-[scale-125]">
+     <div class="basis-full p-1 ml-1">
+       <div id="os-icon" class="flex os-icon bg-id-card-icon mr-[5px]"></div>
+     </div>
+    </div>
     """
   end
   

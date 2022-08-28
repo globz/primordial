@@ -10,7 +10,7 @@ defmodule PrimordialWeb.UserObjects.IdCardFunctions.Context do
       <%= if @context == :swipe do %>     
        <p>
         <button type="button" class="btn-primary" phx-click="export" phx-target="#id-card">Export</button>
-        <button type="button" class="btn-primary" phx-click="boot_up" phx-target="#id-card">Boot up</button>
+        <button type="button" class="btn-primary" phx-click="boot_up" phx-target="#id-card">Soup OS</button>
          <%= if @fn_id == :export do %>
            <.live_component 
            module={IdCardFunctions.Export} 
