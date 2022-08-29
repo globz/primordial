@@ -10,7 +10,7 @@ defmodule PrimordialWeb.SoupLive do
     self-center justify-center">
      <div id="os-icon" class="flex soup-os-icon bg-id-card-icon mr-[5px]"></div>
      <div id="os-icon" class="flex soup-os-icon bg-entangle-icon mr-[5px]"></div>
-     <div id="os-icon" class="flex soup-os-icon bg-id-card-icon mr-[5px]"></div>
+     <div id="os-icon" class="flex soup-os-icon bg-agi-icon bg-black mr-[5px]"></div>
      <div id="os-icon" class="flex soup-os-icon bg-id-card-icon mr-[5px]"></div>
     </div>
     """
@@ -64,7 +64,7 @@ defmodule PrimordialWeb.SoupLive do
         |> redirect(to: Routes.page_path(socket, :index))
 
       _ ->
-        #Process.send_after(self(), :clear_flash, 5000)
+        Process.send_after(self(), :clear_flash, 5000)
         check_soup_state(socket, socket.assigns.soup_state)
     end
   end
@@ -72,9 +72,11 @@ defmodule PrimordialWeb.SoupLive do
   defp select_bg() do
     bg = [
       "bg-soup-os-bg-1",
-      "bg-soup-os-bg-2"
+      "bg-soup-os-bg-2",
+      "bg-soup-os-bg-3",
+      "bg-soup-os-bg-4"      
     ]    
-    rand_bg = Enum.random(0..1)
+    rand_bg = Enum.random(0..3)
     selected_bg = Enum.at(bg, rand_bg)
     "soup-os-bg-base #{selected_bg}"
   end
