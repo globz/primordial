@@ -31,6 +31,7 @@ module.exports = {
         'id-card-icon': "url('/images/id_card_icon.png')",
         'entangle-icon': "url('/images/entangle_icon.png')",
         'agi-icon': "url('/images/agi_icon.png')",
+        'simulation-icon': "url('/images/simulation_icon.png')",
         'soup-os-bg-1': "url('/images/soup_os_bg_1.png')",
         'soup-os-bg-2': "url('/images/soup_os_bg_2.png')",
         'soup-os-bg-3': "url('/images/soup_os_bg_3.png')",

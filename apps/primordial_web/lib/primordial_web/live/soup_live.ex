@@ -11,7 +11,7 @@ defmodule PrimordialWeb.SoupLive do
      <div id="os-icon" class="flex soup-os-icon bg-id-card-icon mr-[5px]"></div>
      <div id="os-icon" class="flex soup-os-icon bg-entangle-icon mr-[5px]"></div>
      <div id="os-icon" class="flex soup-os-icon bg-agi-icon bg-black mr-[5px]"></div>
-     <div id="os-icon" class="flex soup-os-icon bg-id-card-icon mr-[5px]"></div>
+     <div id="os-icon" class="flex soup-os-icon bg-simulation-icon mr-[5px]"></div>
     </div>
     """
   end

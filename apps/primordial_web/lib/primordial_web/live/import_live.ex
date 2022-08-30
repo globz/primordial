@@ -60,8 +60,8 @@ defmodule PrimordialWeb.ImportLive do
     {:noreply, assign(socket, :changeset, changeset)}
   end  
 
-  def handle_event("import", %{"token" => token_params}, socket) do
-    import_token(socket, :import, token_params)    
+  def handle_event("import", %{"token" => token_params}, socket) do    
+    import_token(socket, :import, token_params)
   end
 
   defp import_token(socket, :import, %{"token" => token}) do
@@ -71,14 +71,13 @@ defmodule PrimordialWeb.ImportLive do
     case Token.verify(PrimordialWeb.Endpoint, token) do
       {:ok, _user_id} ->
        {:noreply,
-         socket
+        socket         
          |> put_flash(:info, "ID card imported successfully")
          |> redirect(to: Routes.session_path(socket, :create, token))}
 
       {:error, :expired} ->        
         changeset =
           Changeset.add_error(changeset, :token, "This Token has expired!")
-        
         {:noreply, assign(socket, :changeset, changeset)}
 
       {:error, :invalid} ->        
