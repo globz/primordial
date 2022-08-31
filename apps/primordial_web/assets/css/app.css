@@ -55,9 +55,11 @@
     }
 
     .soup-os-icon {
-        @apply rounded-xl  w-[60px] h-[60px] lg:w-[70px] lg:h-[70px] bg-center
+        @apply touch-none rounded-xl  w-[60px] h-[60px] lg:w-[70px] lg:h-[70px] bg-center
         bg-no-repeat bg-contain border-double border-x-4 border-y-4  border-black
-        bg-clip-content shadow-xl lg:shadow-2xl shadow-indigo-500/50 hover:scale-75 transform-gpu mx-2 mt-2 ring-2 ring-indigo-600;
+        bg-clip-content shadow-xl lg:shadow-2xl shadow-indigo-500/50
+        lg:scale-110 hover:scale-75 transform-gpu mx-2 mt-2 ring-2 lg:mx-4
+        lg:mt-4 ring-indigo-600;
     }
 
     .soup-os-bg-base {

@@ -15,7 +15,7 @@ defmodule PrimordialWeb.UserObjects.IdCardComponent do
   @impl true
   def render(assigns) do
     ~H"""
-     <div id="id-card" class="flex flex-row flex-wrap h-[250px] w-full lg:w-[80%] grow border-solid border-y-2 border-x-2 border-[#000] rounded-xl bg-[#E9EEF2] m-auto shadow-black shadow-md h-fit">
+     <div id="id-card" class="flex flex-row flex-wrap h-[250px] w-full lg:w-[65%] grow border-solid border-y-2 border-x-2 border-[#000] rounded-xl bg-[#E9EEF2] m-auto shadow-black shadow-md h-fit">
       <div class="basis-full bg-[cornflowerblue] text-center text-white lg:tracking-widest uppercase rounded-t-lg p-2">
         <h1>Simulation Supervisor</h1>
       </div>
@@ -53,7 +53,7 @@ defmodule PrimordialWeb.UserObjects.IdCardComponent do
         portrait:after:content-['(x)[=][#][~][=][#][~][=][#][~](x)']
         landscape:md:after:content-['(x)[=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~](x)']
         landscape:lg:after:content-['(x)[=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~](x)']
-        landscape:xl:after:content-['(x)[=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~](x)']">
+        landscape:xl:after:content-['(x)[=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~](x)']">
         </div>
      </div>
     """

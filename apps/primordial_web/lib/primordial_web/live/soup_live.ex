@@ -3,15 +3,29 @@ defmodule PrimordialWeb.SoupLive do
   
   alias Primordial.Accounts
 
+    # <%= if Enum.member?([:id_card_app, :entangle_app], @drawer_id) do %>
+    # <.live_component 
+    # module={Soup.App.Drawer} 
+    # token={@token}
+    # id={@user.id}  
+    # title={@page_title} />
+    # <% end %>
+  
   @impl true
   def render(assigns) do
     ~H"""
     <div class="flex flex-row grow basis-1/5 lg:basis-1/2 p-2 ml-1 pt-16
     self-center justify-center">
-     <div id="os-icon" class="flex soup-os-icon bg-id-card-icon mr-[5px]"></div>
-     <div id="os-icon" class="flex soup-os-icon bg-entangle-icon mr-[5px]"></div>
-     <div id="os-icon" class="flex soup-os-icon bg-agi-icon bg-black mr-[5px]"></div>
-     <div id="os-icon" class="flex soup-os-icon bg-simulation-icon mr-[5px]"></div>
+     <button id="os-icon" class="flex soup-os-icon bg-id-card-icon mr-[5px]" phx-click="id-card-app"></button>
+     <button id="os-icon" class="flex soup-os-icon bg-entangle-icon mr-[5px]" phx-click="entangle-app"></button>
+     <button id="os-icon" class="flex soup-os-icon bg-agi-icon bg-black mr-[5px]" phx-click="agi-app"></button>
+     <button id="os-icon" class="flex soup-os-icon bg-simulation-icon mr-[5px]" phx-click="simulation-app"></button>
+    </div>
+    <div class="flex flex-row grow basis-1/5 lg:basis-1/2 p-2 ml-1 pt-2 self-center justify-center">
+     <button id="os-icon" class="flex soup-os-icon bg-jobs-icon mr-[5px]" phx-click="jobs-app"></button>
+     <button id="os-icon" class="flex soup-os-icon bg-profession-icon mr-[5px]" phx-click="profession-app"></button>
+     <button id="os-icon" class="flex soup-os-icon bg-system-state-icon bg-black mr-[5px]" phx-click="system-state-app"></button>
+     <button id="os-icon" class="flex soup-os-icon bg-democratic-results-icon mr-[5px]" phx-click="democratic-app"></button>
     </div>
     """
   end
@@ -24,7 +38,8 @@ defmodule PrimordialWeb.SoupLive do
         user: Accounts.get_user!(user_id),
         token: token,
         soup_state: state,
-        bg: select_bg())
+        bg: select_bg(),
+        drawer_id: :none)
         {:ok, socket, layout: {PrimordialWeb.LayoutView, "soup.html"}}
         
       {:error, :expired} ->
@@ -88,4 +103,65 @@ defmodule PrimordialWeb.SoupLive do
   def handle_info(:clear_flash, socket) do
     {:noreply, clear_flash(socket)}
   end
+
+  @impl true
+  def handle_event("id-card-app", _assigns, socket) do
+    IO.puts(":id-card-app")
+    {:noreply, assign(socket, drawer_id: :id_card_app, page_title: "fn_id: :id-card-app")}
+  end
+
+  @impl true
+  def handle_event("entangle-app", _assigns, socket) do
+    IO.puts(":entangle-app")
+    {:noreply, assign(socket, drawer_id: :entangle_app, page_title: "fn_id: :entangle-app")}
+  end
+
+  @impl true
+  def handle_event("agi-app", _assigns, socket) do
+    IO.puts(":agi-app")
+    {:noreply, assign(socket, drawer_id: :agi_app, page_title: "fn_id: :agi-app")}
+  end
+
+  @impl true
+  def handle_event("simulation-app", _assigns, socket) do
+    IO.puts(":simulation-app")
+    {:noreply, assign(socket, drawer_id: :simulation_app, page_title: "fn_id: :simulation-app")}
+  end
+
+  @impl true
+  def handle_event("jobs-app", _assigns, socket) do
+    IO.puts(":jobs-app")
+    {:noreply, assign(socket, drawer_id: :jobs_app, page_title: "fn_id: :jobs-app")}
+  end
+
+  @impl true
+  def handle_event("profession-app", _assigns, socket) do
+    IO.puts(":profession-app")
+    {:noreply, assign(socket, drawer_id: :profession_app, page_title: "fn_id: :profession-app")}
+  end
+
+  @impl true
+  def handle_event("system-state-app", _assigns, socket) do
+    IO.puts(":system-state-app")
+    {:noreply, assign(socket, drawer_id: :system_state_app, page_title: "fn_id: :system-state-app")}
+  end
+
+  @impl true
+  def handle_event("democratic-app", _assigns, socket) do
+    IO.puts(":democratic-app")
+    {:noreply, assign(socket, drawer_id: :democratic_app, page_title: "fn_id: :democratic-app")}
+  end
+
+  @impl true
+  def handle_event("close", _assigns, socket) do
+    {:noreply, assign(socket, :fn_id, :none)}
+  end
+
+  def handle_event("close_with_key", %{"key" => "Escape"}, socket) do
+    {:noreply, assign(socket, :fn_id, :none)}
+  end
+
+  def handle_event("close_with_key", _, socket) do
+    {:noreply, socket}
+  end  
 end

@@ -21,7 +21,7 @@ defmodule PrimordialWeb.UserObjects.IdCardFunctions.Context do
          <%= if @fn_id == :boot_up do %>
            <.live_component
            module={IdCardFunctions.BootUp}
-           token={@token} id={@user.id}
+           id={@user.id}
            title={@page_title} />
          <% end %>
        </p>

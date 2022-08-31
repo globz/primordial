@@ -81,13 +81,44 @@ defmodule PrimordialWeb.LiveHelpers do
 
     ~H"""
     <div id="modal" class="phx-modal fade-in id-card-fn">
-     <div id="modal-content" class="phx-modal-content fade-in-scale flex flex-row flex-wrap w-full lg:w-[80%]">
+     <div id="modal-content" class="phx-modal-content fade-in-scale flex flex-row flex-wrap w-full lg:w-[80%] rounded-xl">
       <a id="close" href="#" class="basis-full phx-modal-close text-right" phx-click="close" phx-window-keyup="close_with_key" phx-target="#id-card">✖</a>
       <%= render_slot(@inner_block) %>
      </div>
     </div>
     """
   end
+
+  @doc """
+  Renders a live component inside soup_drawer.
+
+  The rendered drawer has no `:return_to` option and is to be strictly used with
+  SoupLive
+
+
+  ## Examples
+
+      <.soup_drawer>
+        <.live_component
+          module={IdCardFunctions.Export}
+          id={@user.id}
+          title={@page_title}
+          user: @user
+        />
+      </.soup_drawer>
+  """
+  def id_card_fn_modal(assigns) do
+    assigns = assign_new(assigns, :return_to, fn -> nil end)
+
+    ~H"""
+    <div id="modal" class="phx-modal fade-in id-card-fn">
+     <div id="modal-content" class="phx-modal-content fade-in-scale flex flex-row flex-wrap w-full lg:w-[80%] rounded-xl">
+      <a id="close" href="#" class="basis-full phx-modal-close text-right" phx-click="close" phx-window-keyup="close_with_key" phx-target="#soup-os">✖</a>
+      <%= render_slot(@inner_block) %>
+     </div>
+    </div>
+    """
+  end  
 
   @doc """
   Renders a clipboard button.
