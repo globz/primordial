@@ -3,19 +3,25 @@ defmodule PrimordialWeb.SoupLive do
   
   alias Primordial.Accounts
 
-    # <%= if Enum.member?([:id_card_app, :entangle_app], @drawer_id) do %>
     # <.live_component 
     # module={Soup.App.Drawer} 
     # token={@token}
     # id={@user.id}  
     # title={@page_title} />
-    # <% end %>
-  
+
+  # @impl true
+  def update(assigns, socket) do
+    IO.inspect(assigns)
+    {:ok,
+     socket
+     |> assign(assigns)
+     |> assign(drawer_id: :none, page_title: "")}
+  end
+
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="flex flex-row grow basis-1/5 lg:basis-1/2 p-2 ml-1 pt-16
-    self-center justify-center">
+    <div id="soup-os" class="flex flex-row grow basis-1/5 lg:basis-1/2 p-2 ml-1 pt-16 self-center justify-center">
      <button id="os-icon" class="flex soup-os-icon bg-id-card-icon mr-[5px]" phx-click="id-card-app"></button>
      <button id="os-icon" class="flex soup-os-icon bg-entangle-icon mr-[5px]" phx-click="entangle-app"></button>
      <button id="os-icon" class="flex soup-os-icon bg-agi-icon bg-black mr-[5px]" phx-click="agi-app"></button>
@@ -27,6 +33,24 @@ defmodule PrimordialWeb.SoupLive do
      <button id="os-icon" class="flex soup-os-icon bg-system-state-icon bg-black mr-[5px]" phx-click="system-state-app"></button>
      <button id="os-icon" class="flex soup-os-icon bg-democratic-results-icon mr-[5px]" phx-click="democratic-app"></button>
     </div>
+    <%= if Enum.member?([:id_card_app, :entangle_app], @drawer_id) do %>
+      <.soup_drawer>
+      <h2 class="basis-full pb-2"><%= @page_title %></h2>
+       <div class="basis-full alert alert-info text-center md:text-left font-semibold" role="alert">
+        <p>
+        The following Token is a secret string which authenticate you with the
+        Primordial Simulation Project.
+        </p>
+        <p>
+        Copy and store this Token in a text document for future reference.
+        </p>
+        <p>
+        You may import this Token to another device or browser.
+        </p>
+       </div>
+       <code id="token-secret" class="text-red-600"><%= @token %></code>
+      </.soup_drawer>
+    <% end %>
     """
   end
   
@@ -104,21 +128,30 @@ defmodule PrimordialWeb.SoupLive do
     {:noreply, clear_flash(socket)}
   end
 
+  # @impl true
+  # def handle_params(params, _url, socket) do
+  #   {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+  # end
+
   @impl true
   def handle_event("id-card-app", _assigns, socket) do
     IO.puts(":id-card-app")
+    #send_update(PrimordialWeb.SoupLive, id: "soup-os", drawer_id: :id_card_app, page_title: "fn_id: :id-card-app")
+    {:noreply, socket}
     {:noreply, assign(socket, drawer_id: :id_card_app, page_title: "fn_id: :id-card-app")}
   end
 
   @impl true
   def handle_event("entangle-app", _assigns, socket) do
     IO.puts(":entangle-app")
+    # IO.inspect(socket)
     {:noreply, assign(socket, drawer_id: :entangle_app, page_title: "fn_id: :entangle-app")}
   end
 
   @impl true
   def handle_event("agi-app", _assigns, socket) do
     IO.puts(":agi-app")
+    # IO.inspect(socket.assigns)    
     {:noreply, assign(socket, drawer_id: :agi_app, page_title: "fn_id: :agi-app")}
   end
 

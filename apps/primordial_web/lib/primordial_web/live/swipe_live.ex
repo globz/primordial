@@ -61,8 +61,4 @@ defmodule PrimordialWeb.SwipeLive do
         put_flash(socket, :info, "Authentication successful!")
     end
   end
-
-  @impl true
-  def handle_info({:user_id, user_id, view_to_show}, socket),
-    do: {:noreply, assign(socket, user_id: user_id, view_to_show: view_to_show)}
 end

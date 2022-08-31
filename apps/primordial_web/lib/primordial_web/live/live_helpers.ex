@@ -107,13 +107,16 @@ defmodule PrimordialWeb.LiveHelpers do
         />
       </.soup_drawer>
   """
-  def id_card_fn_modal(assigns) do
+  def soup_drawer(assigns) do
     assigns = assign_new(assigns, :return_to, fn -> nil end)
 
     ~H"""
-    <div id="modal" class="phx-modal fade-in id-card-fn">
+    <div id="modal" class="phx-modal fade-in id-card-fn"
+    phx-click-away={JS.dispatch("click", to: "#close")}
+    phx-window-keydown={JS.dispatch("click", to: "#close")}
+    phx-key="escape">
      <div id="modal-content" class="phx-modal-content fade-in-scale flex flex-row flex-wrap w-full lg:w-[80%] rounded-xl">
-      <a id="close" href="#" class="basis-full phx-modal-close text-right" phx-click="close" phx-window-keyup="close_with_key" phx-target="#soup-os">✖</a>
+      <a id="close" href="#" class="basis-full phx-modal-close text-right" phx-click={hide_modal()}>✖</a>
       <%= render_slot(@inner_block) %>
      </div>
     </div>
