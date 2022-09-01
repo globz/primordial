@@ -2,7 +2,7 @@ defmodule PrimordialWeb.SwipeLive do
   use PrimordialWeb, :live_view
 
   alias Primordial.Accounts
-
+             #action={@live_action}
   @impl true
   def render(assigns) do
     ~H"""
@@ -10,7 +10,6 @@ defmodule PrimordialWeb.SwipeLive do
            <.live_component
              module={PrimordialWeb.UserObjects.IdCardComponent}
              id={@user.id}
-             action={@live_action}
              user={@user}
              token={@token}
              context={@context}

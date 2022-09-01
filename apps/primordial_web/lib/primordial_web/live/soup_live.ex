@@ -3,20 +3,8 @@ defmodule PrimordialWeb.SoupLive do
   
   alias Primordial.Accounts
 
-    # <.live_component 
-    # module={Soup.App.Drawer} 
-    # token={@token}
-    # id={@user.id}  
-    # title={@page_title} />
-
-  # @impl true
-  def update(assigns, socket) do
-    IO.inspect(assigns)
-    {:ok,
-     socket
-     |> assign(assigns)
-     |> assign(drawer_id: :none, page_title: "")}
-  end
+  @apps [:id_card_app, :entangle_app, :agi_app, :simulation_app, :jobs_app,
+  :profession_app, :system_state_app, :democratic_app]
 
   @impl true
   def render(assigns) do
@@ -33,23 +21,16 @@ defmodule PrimordialWeb.SoupLive do
      <button id="os-icon" class="flex soup-os-icon bg-system-state-icon bg-black mr-[5px]" phx-click="system-state-app"></button>
      <button id="os-icon" class="flex soup-os-icon bg-democratic-results-icon mr-[5px]" phx-click="democratic-app"></button>
     </div>
-    <%= if Enum.member?([:id_card_app, :entangle_app], @drawer_id) do %>
-      <.soup_drawer>
-      <h2 class="basis-full pb-2"><%= @page_title %></h2>
-       <div class="basis-full alert alert-info text-center md:text-left font-semibold" role="alert">
-        <p>
-        The following Token is a secret string which authenticate you with the
-        Primordial Simulation Project.
-        </p>
-        <p>
-        Copy and store this Token in a text document for future reference.
-        </p>
-        <p>
-        You may import this Token to another device or browser.
-        </p>
-       </div>
-       <code id="token-secret" class="text-red-600"><%= @token %></code>
-      </.soup_drawer>
+    <%= if Enum.member?(@apps, @drawer_id) do %>
+      <.live_component
+        module={PrimordialWeb.SoupComponents.AppDrawer}
+        id={@user.id}
+        drawer_id={@drawer_id}
+        user={@user}
+        action={@live_action}
+        token={@token}
+        app_title={@app_title}
+      />
     <% end %>
     """
   end
@@ -63,7 +44,8 @@ defmodule PrimordialWeb.SoupLive do
         token: token,
         soup_state: state,
         bg: select_bg(),
-        drawer_id: :none)
+        drawer_id: :none,
+        apps: @apps)
         {:ok, socket, layout: {PrimordialWeb.LayoutView, "soup.html"}}
         
       {:error, :expired} ->
@@ -121,80 +103,59 @@ defmodule PrimordialWeb.SoupLive do
   end
 
   @impl true
-  def handle_info({:user_id, user_id}, socket),
-    do: {:noreply, assign(socket, user_id: user_id)}
-
+  def handle_info({:drawer_id, id}, socket) do
+    {:noreply, assign(socket, drawer_id: id)}
+  end
+  
   def handle_info(:clear_flash, socket) do
     {:noreply, clear_flash(socket)}
   end
 
-  # @impl true
-  # def handle_params(params, _url, socket) do
-  #   {:noreply, apply_action(socket, socket.assigns.live_action, params)}
-  # end
-
   @impl true
   def handle_event("id-card-app", _assigns, socket) do
     IO.puts(":id-card-app")
-    #send_update(PrimordialWeb.SoupLive, id: "soup-os", drawer_id: :id_card_app, page_title: "fn_id: :id-card-app")
-    {:noreply, socket}
-    {:noreply, assign(socket, drawer_id: :id_card_app, page_title: "fn_id: :id-card-app")}
+    {:noreply, assign(socket, drawer_id: :id_card_app, app_title: "app_id: :id-card-app")}
   end
 
   @impl true
   def handle_event("entangle-app", _assigns, socket) do
     IO.puts(":entangle-app")
-    # IO.inspect(socket)
-    {:noreply, assign(socket, drawer_id: :entangle_app, page_title: "fn_id: :entangle-app")}
+    {:noreply, assign(socket, drawer_id: :entangle_app, app_title: "app_id: :entangle-app")}
   end
 
   @impl true
   def handle_event("agi-app", _assigns, socket) do
     IO.puts(":agi-app")
-    # IO.inspect(socket.assigns)    
-    {:noreply, assign(socket, drawer_id: :agi_app, page_title: "fn_id: :agi-app")}
+    {:noreply, assign(socket, drawer_id: :agi_app, app_title: "app_id: :agi-app")}
   end
 
   @impl true
   def handle_event("simulation-app", _assigns, socket) do
     IO.puts(":simulation-app")
-    {:noreply, assign(socket, drawer_id: :simulation_app, page_title: "fn_id: :simulation-app")}
+    {:noreply, assign(socket, drawer_id: :simulation_app, app_title: "app_id: :simulation-app")}
   end
 
   @impl true
   def handle_event("jobs-app", _assigns, socket) do
     IO.puts(":jobs-app")
-    {:noreply, assign(socket, drawer_id: :jobs_app, page_title: "fn_id: :jobs-app")}
+    {:noreply, assign(socket, drawer_id: :jobs_app, app_title: "app_id: :jobs-app")}
   end
 
   @impl true
   def handle_event("profession-app", _assigns, socket) do
     IO.puts(":profession-app")
-    {:noreply, assign(socket, drawer_id: :profession_app, page_title: "fn_id: :profession-app")}
+    {:noreply, assign(socket, drawer_id: :profession_app, app_title: "app_id: :profession-app")}
   end
 
   @impl true
   def handle_event("system-state-app", _assigns, socket) do
     IO.puts(":system-state-app")
-    {:noreply, assign(socket, drawer_id: :system_state_app, page_title: "fn_id: :system-state-app")}
+    {:noreply, assign(socket, drawer_id: :system_state_app, app_title: "app_id: :system-state-app")}
   end
 
   @impl true
   def handle_event("democratic-app", _assigns, socket) do
     IO.puts(":democratic-app")
-    {:noreply, assign(socket, drawer_id: :democratic_app, page_title: "fn_id: :democratic-app")}
-  end
-
-  @impl true
-  def handle_event("close", _assigns, socket) do
-    {:noreply, assign(socket, :fn_id, :none)}
-  end
-
-  def handle_event("close_with_key", %{"key" => "Escape"}, socket) do
-    {:noreply, assign(socket, :fn_id, :none)}
-  end
-
-  def handle_event("close_with_key", _, socket) do
-    {:noreply, socket}
+    {:noreply, assign(socket, drawer_id: :democratic_app, app_title: "app_id: :democratic-app")}
   end  
 end

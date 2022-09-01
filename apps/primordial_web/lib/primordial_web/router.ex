@@ -34,7 +34,7 @@ defmodule PrimordialWeb.Router do
 
   scope "/enroll", PrimordialWeb.Enroll, as: :enroll do
     pipe_through :browser
-  
+    
     live "/users", UserLive.Index, :index
     live "/users/new", UserLive.Index, :new
     live "/users/:id/edit", UserLive.Index, :edit
@@ -42,6 +42,12 @@ defmodule PrimordialWeb.Router do
     live "/users/:id", UserLive.Show, :show
     live "/users/:id/show/edit", UserLive.Show, :edit
   end
+
+  # scope "/soup", PrimordialWeb.Enroll, as: :soup do
+  #   pipe_through :browser
+
+  #   live "/os", OperatingSystemLive, :sign_in
+  # end
   
   # Other scopes may use custom stacks.
   # scope "/api", PrimordialWeb do

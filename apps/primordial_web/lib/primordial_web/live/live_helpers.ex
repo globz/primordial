@@ -90,37 +90,59 @@ defmodule PrimordialWeb.LiveHelpers do
   end
 
   @doc """
-  Renders a live component inside soup_drawer.
+  Renders a live component inside soup_app_drawer.
 
   The rendered drawer has no `:return_to` option and is to be strictly used with
-  SoupLive
+  SoupLive & AppDrawer
 
 
   ## Examples
 
-      <.soup_drawer>
+      <.soup_app_drawer>
         <.live_component
-          module={IdCardFunctions.Export}
+          module={PrimordialWeb.SoupComponents.AppDrawer}
           id={@user.id}
-          title={@page_title}
+          app_title={@app_title}
           user: @user
         />
-      </.soup_drawer>
+      </.soup_app_drawer>
   """
-  def soup_drawer(assigns) do
+  def soup_app_drawer(assigns) do
     assigns = assign_new(assigns, :return_to, fn -> nil end)
 
     ~H"""
-    <div id="modal" class="phx-modal fade-in id-card-fn"
-    phx-click-away={JS.dispatch("click", to: "#close")}
-    phx-window-keydown={JS.dispatch("click", to: "#close")}
-    phx-key="escape">
+    <div id="modal" class="phx-modal fade-in id-card-fn">
      <div id="modal-content" class="phx-modal-content fade-in-scale flex flex-row flex-wrap w-full lg:w-[80%] rounded-xl">
-      <a id="close" href="#" class="basis-full phx-modal-close text-right" phx-click={hide_modal()}>✖</a>
+      <a id="close" href="#" class="basis-full phx-modal-close text-right" phx-click="close" phx-window-keyup="close_with_key" phx-target="#app-drawer">✖</a>
       <%= render_slot(@inner_block) %>
      </div>
     </div>
     """
+    
+    # ~H"""
+    # <div id="modal" class="phx-modal fade-in" phx-remove={hide_modal()}>
+    #   <div
+    #     id="modal-content"
+    #     class="phx-modal-content fade-in-scale flex flex-row flex-wrap w-full lg:w-[80%] rounded-xl"
+    #     phx-click-away={JS.dispatch("click", to: "#close")}
+    #     phx-window-keydown={JS.dispatch("click", to: "#close")}
+    #     phx-key="escape"
+    #   >
+    #     <%= if @return_to do %>
+    #       <%= live_patch "✖",
+    #         to: @return_to,
+    #         id: "close",
+    #         class: "basis-full phx-modal-close text-right",
+    #         phx_click: hide_modal()
+    #       %>
+    #     <% else %>
+    #       <a id="close" href="#" class="basis-full phx-modal-close text-right" phx-click={hide_modal()}>✖</a>
+    #     <% end %>
+      
+    #   <%= render_slot(@inner_block) %>
+    #  </div>
+    # </div>
+    # """
   end  
 
   @doc """
