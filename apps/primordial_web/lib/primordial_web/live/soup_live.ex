@@ -20,7 +20,7 @@ defmodule PrimordialWeb.SoupLive do
       <button id="os-icon" class="soup-os-icon bg-jobs-icon mr-[5px]" phx-click="jobs-app"></button>
       <button id="os-icon" class="soup-os-icon bg-profession-icon mr-[5px]" phx-click="profession-app"></button>
       <button id="os-icon" class="soup-os-icon bg-system-state-icon bg-black mr-[5px]" phx-click="system-state-app"></button>
-      <button id="os-icon" class="soup-os-icon bg-democratic-results-icon mr-[5px]" phx-click="democratic-app"></button>
+      <button id="os-icon" class="soup-os-icon bg-democratic-icon mr-[5px]" phx-click="democratic-app"></button>
      </div>
     </div>
     <%= if Enum.member?(@apps, @drawer_id) do %>
@@ -29,7 +29,6 @@ defmodule PrimordialWeb.SoupLive do
         id={@user.id}
         drawer_id={@drawer_id}
         user={@user}
-        app_title={@app_title}
       />
     <% end %>
     """
@@ -114,48 +113,48 @@ defmodule PrimordialWeb.SoupLive do
   @impl true
   def handle_event("id-card-app", _assigns, socket) do
     IO.puts(":id-card-app")
-    {:noreply, assign(socket, drawer_id: :id_card_app, app_title: "app_id: :id-card-app")}
+    {:noreply, assign(socket, drawer_id: :id_card_app)}
   end
 
   @impl true
   def handle_event("entangle-app", _assigns, socket) do
     IO.puts(":entangle-app")
-    {:noreply, assign(socket, drawer_id: :entangle_app, app_title: "app_id: :entangle-app")}
+    {:noreply, assign(socket, drawer_id: :entangle_app)}
   end
 
   @impl true
   def handle_event("agi-app", _assigns, socket) do
     IO.puts(":agi-app")
-    {:noreply, assign(socket, drawer_id: :agi_app, app_title: "app_id: :agi-app")}
+    {:noreply, assign(socket, drawer_id: :agi_app)}
   end
 
   @impl true
   def handle_event("simulation-app", _assigns, socket) do
     IO.puts(":simulation-app")
-    {:noreply, assign(socket, drawer_id: :simulation_app, app_title: "app_id: :simulation-app")}
+    {:noreply, assign(socket, drawer_id: :simulation_app)}
   end
 
   @impl true
   def handle_event("jobs-app", _assigns, socket) do
     IO.puts(":jobs-app")
-    {:noreply, assign(socket, drawer_id: :jobs_app, app_title: "app_id: :jobs-app")}
+    {:noreply, assign(socket, drawer_id: :jobs_app)}
   end
 
   @impl true
   def handle_event("profession-app", _assigns, socket) do
     IO.puts(":profession-app")
-    {:noreply, assign(socket, drawer_id: :profession_app, app_title: "app_id: :profession-app")}
+    {:noreply, assign(socket, drawer_id: :profession_app)}
   end
 
   @impl true
   def handle_event("system-state-app", _assigns, socket) do
     IO.puts(":system-state-app")
-    {:noreply, assign(socket, drawer_id: :system_state_app, app_title: "app_id: :system-state-app")}
+    {:noreply, assign(socket, drawer_id: :system_state_app)}
   end
 
   @impl true
   def handle_event("democratic-app", _assigns, socket) do
     IO.puts(":democratic-app")
-    {:noreply, assign(socket, drawer_id: :democratic_app, app_title: "app_id: :democratic-app")}
+    {:noreply, assign(socket, drawer_id: :democratic_app)}
   end  
 end

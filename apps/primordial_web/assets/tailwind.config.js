@@ -35,7 +35,7 @@ module.exports = {
         'jobs-icon': "url('/images/soup/icons/jobs_icon.webp')",
         'profession-icon': "url('/images/soup/icons/profession_icon.webp')",
         'system-state-icon': "url('/images/soup/icons/system_state_icon.webp')",
-        'democratic-results-icon': "url('/images/soup/icons/democratic_results_icon.webp')",
+        'democratic-icon': "url('/images/soup/icons/democratic_icon.webp')",
         'soup-os-bg-1': "url('/images/soup/bg/soup_os_bg_1.webp')",
         'soup-os-bg-2': "url('/images/soup/bg/soup_os_bg_2.webp')",
         'soup-os-bg-3': "url('/images/soup/bg/soup_os_bg_3.webp')",
