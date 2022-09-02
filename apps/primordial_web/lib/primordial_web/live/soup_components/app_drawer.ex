@@ -6,7 +6,7 @@ defmodule PrimordialWeb.SoupComponents.AppDrawer do
     ~H"""
      <div id="app-drawer">
       <.soup_app_drawer>
-       <h2 class="pb-2"><%= @app_title %></h2>
+       <h3 class="pb-2"><%= @app_title %></h3>
       </.soup_app_drawer>
      </div>
     """

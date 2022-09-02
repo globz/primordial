@@ -119,8 +119,9 @@ defmodule PrimordialWeb.LiveHelpers do
     # </div>
     
     ~H"""
-    <div id="drawer-example" class="fixed z-40 h-screen p-4 overflow-y-auto
-    bg-white w-80 dark:bg-gray-800 rounded-4xl" tabindex="-1" aria-labelledby="drawer-label">
+    <div id="drawer" class="fixed z-40 p-4 overflow-y-clip border-2
+    border-indigo-600 p-5 h-[165vw] md:h-[85%] lg:h-full w-[85%] lg:w-[35%] bg-white
+    dark:bg-gray-800 rounded-4xl inset-y-0" tabindex="-1">
        <h5 id="drawer-label" class="inline-flex items-center mb-4 text-base font-semibold text-gray-500 dark:text-gray-400"><svg class="w-5 h-5 mr-2" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>Info</h5>
        <a id="close" href="#" class="phx-modal-close text-right" phx-click="close" phx-window-keyup="close_with_key" phx-target="#app-drawer">✖</a>
        <%= render_slot(@inner_block) %>
