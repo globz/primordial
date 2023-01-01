@@ -43,7 +43,7 @@ defmodule PrimordialWeb.SoupComponents.AppDrawer do
   # end
   
   defp app_detailed_icon(drawer_id) do
-      icons = [
+    icons = [
       id_card_app: "bg-id-card-icon",
       entangle_app: "bg-entangle-icon",
       agi_app: "bg-agi-icon bg-black",
@@ -61,7 +61,7 @@ defmodule PrimordialWeb.SoupComponents.AppDrawer do
       id_card_app: "Manage your identity.</br>Execute personal
       functions.</br>Approve/Deny users requests.",
       entangle_app: "Entangle with other Human beings.",
-      agi_app: "Meet your Master.</br>Marvel at this Creation</br>Face the
+      agi_app: "Meet your Master.</br>Marvel at this ultimate creation.</br>Face the
       Truth.</br>Influence AI alignment with human intent.",
       simulation_app: "Gaze at this marvelous Simulation.</br>Please manage it
       with care and passion.</br>Influence it for the better.</br><b>Never lose
@@ -73,7 +73,7 @@ defmodule PrimordialWeb.SoupComponents.AppDrawer do
       of the Simulation goal.</b>",
       system_state_app: "Analyze Soup OS system state and carefully craft your next decisions.",
       democratic_app: "View all past democratic actions voted by the Simulation Supervisors."]
-      desc = descriptions[drawer_id]
+      descriptions[drawer_id]
   end
 
   # defp app_launcher(drawer_id) do

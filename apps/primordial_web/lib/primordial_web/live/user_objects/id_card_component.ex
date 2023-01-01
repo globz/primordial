@@ -52,8 +52,7 @@ defmodule PrimordialWeb.UserObjects.IdCardComponent do
         <div class="basis-full shadow-inner shadow-blue-400 p-[5px] bg-[#fff] text-[lightsteelblue] italic rounded-b-lg text-center
         portrait:after:content-['(x)[=][#][~][=][#][~][=][#][~](x)']
         landscape:md:after:content-['(x)[=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~](x)']
-        landscape:lg:after:content-['(x)[=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~](x)']
-        landscape:xl:after:content-['(x)[=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~](x)']">
+        landscape:lg:after:content-['(x)[=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~][=][#][~](x)']">
         </div>
      </div>
     """

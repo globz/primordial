@@ -11,16 +11,16 @@ defmodule PrimordialWeb.SoupLive do
     ~H"""
     <div id="soup-os" class="flex flex-wrap self-center justify-center">
      <div class="basis-1/2 inline-flex p-2 ml-1 pt-16 self-center justify-center">
-      <button id="os-icon" class="soup-os-icon bg-id-card-icon mr-[5px]" phx-click="id-card-app"></button>
-      <button id="os-icon" class="soup-os-icon bg-entangle-icon mr-[5px]" phx-click="entangle-app"></button>
-      <button id="os-icon" class="soup-os-icon bg-agi-icon bg-black mr-[5px]" phx-click="agi-app"></button>
-      <button id="os-icon" class="soup-os-icon bg-simulation-icon mr-[5px]" phx-click="simulation-app"></button>
+      <button id="os-icon-1" class="soup-os-icon bg-id-card-icon mr-[5px]" phx-click="id-card-app"></button>
+      <button id="os-icon-2" class="soup-os-icon bg-entangle-icon mr-[5px]" phx-click="entangle-app"></button>
+      <button id="os-icon-3" class="soup-os-icon bg-agi-icon bg-black mr-[5px]" phx-click="agi-app"></button>
+      <button id="os-icon-4" class="soup-os-icon bg-simulation-icon mr-[5px]" phx-click="simulation-app"></button>
      </div>
      <div class="basis-1/2 inline-flex p-2 ml-1 pt-2 self-center justify-center">
-      <button id="os-icon" class="soup-os-icon bg-jobs-icon mr-[5px]" phx-click="jobs-app"></button>
-      <button id="os-icon" class="soup-os-icon bg-profession-icon mr-[5px]" phx-click="profession-app"></button>
-      <button id="os-icon" class="soup-os-icon bg-system-state-icon bg-black mr-[5px]" phx-click="system-state-app"></button>
-      <button id="os-icon" class="soup-os-icon bg-democratic-icon mr-[5px]" phx-click="democratic-app"></button>
+      <button id="os-icon-5" class="soup-os-icon bg-jobs-icon mr-[5px]" phx-click="jobs-app"></button>
+      <button id="os-icon-6" class="soup-os-icon bg-profession-icon mr-[5px]" phx-click="profession-app"></button>
+      <button id="os-icon-7" class="soup-os-icon bg-system-state-icon bg-black mr-[5px]" phx-click="system-state-app"></button>
+      <button id="os-icon-8" class="soup-os-icon bg-democratic-icon mr-[5px]" phx-click="democratic-app"></button>
      </div>
     </div>
     <%= if Enum.member?(@apps, @drawer_id) do %>
