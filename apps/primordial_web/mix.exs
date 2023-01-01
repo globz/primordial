@@ -37,22 +37,22 @@ defmodule PrimordialWeb.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.6.11"},
+      {:phoenix, "~> 1.6.15"},
       {:phoenix_ecto, "~> 4.4"},
       {:phoenix_html, "~> 3.2.0"},
-      {:phoenix_live_reload, "~> 1.3.3", only: :dev},
-      {:phoenix_live_view, "~> 0.17.11"},
+      {:phoenix_live_reload, "~> 1.4.1", only: :dev},
+      {:phoenix_live_view, "~> 0.18.3"},
       {:floki, ">= 0.30.0", only: :test},
-      {:phoenix_live_dashboard, "~> 0.6"},
-      {:esbuild, "~> 0.4", runtime: Mix.env() == :dev},
-      {:telemetry_metrics, "~> 0.6"},
+      {:phoenix_live_dashboard, "~> 0.7.2"},
+      {:esbuild, "~> 0.6.0", runtime: Mix.env() == :dev},
+      {:telemetry_metrics, "~> 0.6.1"},
       {:telemetry_poller, "~> 1.0"},
-      {:gettext, "~> 0.18"},
+      {:gettext, "~> 0.20.0"},
       {:primordial, in_umbrella: true},
-      {:jason, "~> 1.2"},
-      {:plug_cowboy, "~> 2.5"},
-      {:ecto_psql_extras, "~> 0.6"},
-      {:tailwind, "~> 0.1", runtime: Mix.env() == :dev}
+      {:jason, "~> 1.4.0"},
+      {:plug_cowboy, "~> 2.6.0"},
+      {:ecto_psql_extras, "~> 0.7.10"},
+      {:tailwind, "~> 0.1.9", runtime: Mix.env() == :dev}
     ]
   end
 

@@ -45,7 +45,7 @@ defmodule PrimordialWeb do
   def live_view do
     quote do
       use Phoenix.LiveView,
-        layout: {PrimordialWeb.LayoutView, "live.html"}
+        layout: {PrimordialWeb.LayoutView, :live}
 
       unquote(view_helpers())
     end

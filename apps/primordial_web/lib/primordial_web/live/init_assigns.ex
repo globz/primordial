@@ -4,8 +4,9 @@ defmodule PrimordialWeb.InitAssigns do
   https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html#on_mount/1
   https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.Router.html#live_session/3
   """
-  import Phoenix.LiveView
-
+  #import Phoenix.LiveView
+  import Phoenix.Component
+  
   def on_mount(:authenticated, _params, _session, socket) do
     {:cont, assign(socket, :page_title, "DemoWeb")}
   end
