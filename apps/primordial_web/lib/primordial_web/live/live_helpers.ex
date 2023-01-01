@@ -26,13 +26,6 @@ defmodule PrimordialWeb.LiveHelpers do
   def modal(assigns) do
     assigns = assign_new(assigns, :return_to, fn -> nil end)
 
-          # <%= live_patch "✖",
-          #   to: @return_to,
-          #   id: "close",
-          #   class: "phx-modal-close",
-          #   phx_click: hide_modal()
-          # %>
-
     ~H"""
     <div id="modal" class="phx-modal fade-in" phx-remove={hide_modal()}>
       <div
@@ -42,12 +35,12 @@ defmodule PrimordialWeb.LiveHelpers do
         phx-window-keydown={JS.dispatch("click", to: "#close")}
         phx-key="escape"
       >
-        <%= if @return_to do %>
-
-        <% else %>
-          <a id="close" href="#" class="phx-modal-close" phx-click={hide_modal()}>✖</a>
-        <% end %>
-
+      <.link
+        {if @return_to, do: [patch: @return_to], else: [href: "#"]},
+        id="close"
+        class="phx-modal-close"
+        phx-click={hide_modal()}
+      >✖</.link>
         <%= render_slot(@inner_block) %>
       </div>
     </div>
