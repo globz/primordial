@@ -7,17 +7,17 @@ defmodule Primordial.PythonWorker do
 
   @timeout 10_000
 
-  def start_link() do
-    GenServer.start_link(__MODULE__, nil)
-  end
+  # def start_link() do
+  #   GenServer.start_link(__MODULE__, nil)
+  # end
 
   def start_link(_) do
     GenServer.start_link(__MODULE__, nil)
   end
 
-  def message(pid, my_string) do
-    GenServer.call(pid, {:hello, my_string})
-  end
+  # def message(pid, my_string) do
+  #   GenServer.call(pid, {:hello, my_string})
+  # end
 
   def call(my_string) do
     Task.async(fn ->
@@ -31,6 +31,32 @@ defmodule Primordial.PythonWorker do
     end)
     |> Task.await(@timeout)
   end
+
+  def call_count(int) do
+    Task.async(fn ->
+      :poolboy.transaction(
+        :python_worker,
+        fn pid ->
+          GenServer.call(pid, {:count, int})
+        end,
+        @timeout
+      )
+    end)
+    |> Task.await(@timeout)
+  end
+
+  def cast_count(int) do
+    Task.async(fn ->
+      :poolboy.transaction(
+        :python_worker,
+        fn pid ->
+          GenServer.cast(pid, {:count, int})
+        end,
+        @timeout
+      )
+    end)
+    |> Task.await(@timeout)
+  end  
 
   #############
   # Callbacks #
@@ -54,4 +80,24 @@ defmodule Primordial.PythonWorker do
     Logger.info("[#{__MODULE__}] Handled call")
     {:reply, {:ok, result}, pid}
   end
+
+  @impl true
+  def handle_call({:count, int}, _from, pid) do
+    result = :python.call(pid, :python_message, :count, [int])
+    Logger.info("[#{__MODULE__}] Handled call")
+    {:reply, {:ok, result}, pid}
+  end
+
+  @impl true  
+  def handle_cast({:count, count}, pid) do
+    :python.call(pid, :python_message, :register_handler, [self()])
+    message = :python.cast(pid, count)
+    {:noreply, message}
+  end
+
+  @impl true  
+  def handle_info({:python, message}, pid) do
+    IO.puts("#{pid} - Received message from python: #{inspect message}")
+    {:stop, :normal, pid}
+  end   
 end
