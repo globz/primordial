@@ -41,7 +41,8 @@ defmodule Primordial.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:jason, "~> 1.2"},
       {:swoosh, "~> 1.3"},
-      {:erlport, "~> 0.10.1"}
+      {:erlport, "~> 0.10.1"},
+      {:poolboy, "~> 1.5"}
     ]
   end
 

@@ -45,7 +45,7 @@ defmodule PrimordialWeb.SoupLive do
         bg: select_bg(),
         drawer_id: :none,
         apps: @apps)
-        {:ok, socket, layout: {PrimordialWeb.LayoutView, "soup.html"}}
+        {:ok, socket, layout: {PrimordialWeb.LayoutView, :soup}}
         
       {:error, :expired} ->
         {:ok, assign(socket, error: "This ID card has expired!")}

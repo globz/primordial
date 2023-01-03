@@ -11,11 +11,23 @@ defmodule Primordial.Application do
       # Start the Ecto repository
       Primordial.Repo,
       # Start the PubSub system
-      {Phoenix.PubSub, name: Primordial.PubSub}
+      {Phoenix.PubSub, name: Primordial.PubSub},
+      # Start PythonServer
+      {Primordial.PythonServer, name: PythonServer},
       # Start a worker by calling: Primordial.Worker.start_link(arg)
       # {Primordial.Worker, arg}
+      :poolboy.child_spec(:worker, python_poolboy_config())
     ]
 
     Supervisor.start_link(children, strategy: :one_for_one, name: Primordial.Supervisor)
   end
+
+  defp python_poolboy_config do
+    [
+      {:name, {:local, :python_worker}},
+      {:worker_module, Primordial.PythonWorker},
+      {:size, 5},
+      {:max_overflow, 0}
+    ]
+  end  
 end
