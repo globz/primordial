@@ -12,10 +12,8 @@ defmodule Primordial.Application do
       Primordial.Repo,
       # Start the PubSub system
       {Phoenix.PubSub, name: Primordial.PubSub},
-      # Start PythonServer
-      {Primordial.PythonServer, name: PythonServer},
       # Start a worker by calling: Primordial.Worker.start_link(arg)
-      # {Primordial.Worker, arg}
+      # {Primordial.Worker, arg}      
       :poolboy.child_spec(:worker, python_poolboy_config())
     ]
 

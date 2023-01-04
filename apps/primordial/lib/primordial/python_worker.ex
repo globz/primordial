@@ -7,29 +7,8 @@ defmodule Primordial.PythonWorker do
 
   @timeout 10_000
 
-  # def start_link() do
-  #   GenServer.start_link(__MODULE__, nil)
-  # end
-
   def start_link(_) do
     GenServer.start_link(__MODULE__, nil)
-  end
-
-  # def message(pid, my_string) do
-  #   GenServer.call(pid, {:hello, my_string})
-  # end
-
-  def call(my_string) do
-    Task.async(fn ->
-      :poolboy.transaction(
-        :python_worker,
-        fn pid ->
-          GenServer.call(pid, {:hello, my_string})
-        end,
-        @timeout
-      )
-    end)
-    |> Task.await(@timeout)
   end
 
   def call_count(int) do
@@ -45,6 +24,19 @@ defmodule Primordial.PythonWorker do
     |> Task.await(@timeout)
   end
 
+  def call_dream_studio(prompt) do
+    Task.async(fn ->
+      :poolboy.transaction(
+        :python_worker,
+        fn pid ->
+          GenServer.call(pid, {:dream_studio, prompt})
+        end,
+        @timeout
+      )
+    end)
+    |> Task.await(@timeout)
+  end  
+
   def cast_count(int) do
     Task.async(fn ->
       :poolboy.transaction(
@@ -56,11 +48,22 @@ defmodule Primordial.PythonWorker do
       )
     end)
     |> Task.await(@timeout)
-  end  
+  end
 
-  #############
-  # Callbacks #
-  #############
+  def cast_dream_studio(int) do
+    Task.async(fn ->
+      :poolboy.transaction(
+        :python_worker,
+        fn pid ->
+          GenServer.cast(pid, {:dream_studio, int})
+        end,
+        @timeout
+      )
+    end)
+    |> Task.await(@timeout)
+  end
+
+  ## Server callbacks
 
   @impl true
   def init(_) do
@@ -75,29 +78,38 @@ defmodule Primordial.PythonWorker do
   end
 
   @impl true
-  def handle_call({:hello, my_string}, _from, pid) do
-    result = :python.call(pid, :python_message, :hello, [my_string])
+  def handle_call({:count, int}, _from, pid) do
+    result = :python.call(pid, :python_message, :count2, [int])
     Logger.info("[#{__MODULE__}] Handled call")
     {:reply, {:ok, result}, pid}
   end
 
   @impl true
-  def handle_call({:count, int}, _from, pid) do
-    result = :python.call(pid, :python_message, :count, [int])
+  def handle_call({:dream_studio, prompt}, _from, pid) do
+    result = :python.call(pid, :dream_studio, :dream_studio_api, [prompt])
     Logger.info("[#{__MODULE__}] Handled call")
     {:reply, {:ok, result}, pid}
-  end
+  end  
 
-  @impl true  
-  def handle_cast({:count, count}, pid) do
+  @impl true
+  def handle_cast({:count, int}, pid) do
     :python.call(pid, :python_message, :register_handler, [self()])
-    message = :python.cast(pid, count)
+    message = :python.cast(pid, int)
     {:noreply, message}
   end
 
+  @impl true
+  def handle_cast({:dream_studio, int}, pid) do
+    :python.call(pid, :dream_studio, :register_handler, [self()])
+    message = :python.cast(pid, int)
+    Logger.info("[#{__MODULE__}] Handled cast")
+    {:noreply, message}
+  end  
+
   @impl true  
   def handle_info({:python, message}, pid) do
-    IO.puts("#{pid} - Received message from python: #{inspect message}")
+    # IO.puts("#{inspect message}")
+    IO.inspect(message)
     {:stop, :normal, pid}
-  end   
+  end
 end

@@ -21,3 +21,9 @@ erl_crash.dump
 
 # Temporary files, for example, from tests.
 /tmp
+
+# Secrets!
+.env
+
+# python cache
+/apps/primordial/priv/python/__pycache__/
