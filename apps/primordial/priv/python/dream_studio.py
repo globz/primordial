@@ -1,6 +1,6 @@
 import os
 import io
-import warnings
+from pathlib import Path
 from PIL import Image
 from stability_sdk import client
 import stability_sdk.interfaces.gooseai.generation.generation_pb2 as generation
@@ -40,17 +40,17 @@ def dream_studio_api(prompt_content):
                                                      # (Available Samplers: ddim, plms, k_euler, k_euler_ancestral, k_heun, k_dpm_2, k_dpm_2_ancestral, k_dpmpp_2s_ancestral, k_lms, k_dpmpp_2m)
     )
 
-    # Set up our warning to print to the console if the adult content classifier is tripped.
-    # If adult content classifier is not tripped, save generated images.
     for resp in answers:
         for artifact in resp.artifacts:
-            if artifact.finish_reason == generation.FILTER:
-                warnings.warn(
-                    "Your request activated the API's safety filters and could not be processed."
-                    "Please modify the prompt and try again.")
             if artifact.type == generation.ARTIFACT_IMAGE:
                 img = Image.open(io.BytesIO(artifact.binary))
-                img_name = str(artifact.seed)+ ".png"
+                img_name = str(artifact.seed)+".png"
+                dir_path = Path("apps/primordial_web/priv/static/images/simulation")
+
+                # Switch working directory
+                if 'simulation' not in os.getcwd():
+                    os.chdir(dir_path)
+                    
                 img.save(img_name) # Save our generated images with their seed number as the filename.
                 return img_name
 

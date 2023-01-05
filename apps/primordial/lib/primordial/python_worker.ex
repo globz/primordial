@@ -59,10 +59,10 @@ defmodule Primordial.PythonWorker do
   end  
 
 
-  # If the task fails...
-  @impl true
-  def handle_info({:DOWN, _ref, _, _, reason}, state) do
-    IO.puts "Task failed with reason #{inspect(reason)}"
-    {:noreply, state}
-  end
+  # # If the task fails...
+  # @impl true
+  # def handle_info({:DOWN, _ref, _, _, reason}, state) do
+  #   IO.puts "Task failed with reason #{inspect(reason)}"
+  #   {:noreply, state}
+  # end
 end
