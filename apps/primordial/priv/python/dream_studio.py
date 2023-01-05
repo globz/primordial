@@ -4,26 +4,9 @@ import warnings
 from PIL import Image
 from stability_sdk import client
 import stability_sdk.interfaces.gooseai.generation.generation_pb2 as generation
-from erlport.erlang import set_message_handler, cast
-from erlport.erlterms import Atom
 
 # Stability Host URL
 os.environ['STABILITY_HOST'] = 'grpc.stability.ai:443'
-
-# Reference to the Elixir process
-message_handler = None
-
-def cast_message(pid, result):
- cast(pid, (Atom(b'python'), result))
-
-def register_handler(pid):
- global message_handler
- message_handler = pid
- 
-def handle_message(message):
- if message_handler:
-  result = dream_studio_api(message)
-  cast_message(message_handler, result)
 
 def dream_studio_api(prompt_content):
 
@@ -70,7 +53,5 @@ def dream_studio_api(prompt_content):
                 img_name = str(artifact.seed)+ ".png"
                 img.save(img_name) # Save our generated images with their seed number as the filename.
                 return img_name
-    
-set_message_handler(handle_message)
 
 
