@@ -5,6 +5,8 @@ from PIL import Image
 from stability_sdk import client
 import stability_sdk.interfaces.gooseai.generation.generation_pb2 as generation
 
+# dependency pip install stability-sdk
+
 # Stability Host URL
 os.environ['STABILITY_HOST'] = 'grpc.stability.ai:443'
 
@@ -42,6 +44,10 @@ def dream_studio_api(prompt_content):
 
     for resp in answers:
         for artifact in resp.artifacts:
+            if artifact.finish_reason == generation.FILTER:
+                warnings.warn(
+                    "Your request activated the API's safety filters and could not be processed."
+                    "Please modify the prompt and try again.")
             if artifact.type == generation.ARTIFACT_IMAGE:
                 img = Image.open(io.BytesIO(artifact.binary))
                 img_name = str(artifact.seed)+".png"
