@@ -1,7 +1,8 @@
 import os
 import io
-from pathlib import Path
 from PIL import Image
+from pathlib import Path
+from erlport.erlterms import Atom
 from stability_sdk import client
 import stability_sdk.interfaces.gooseai.generation.generation_pb2 as generation
 

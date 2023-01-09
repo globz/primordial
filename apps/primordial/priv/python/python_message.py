@@ -15,7 +15,7 @@ def register_handler(pid):
  
 def handle_message(message):
  if message_handler:
-  #result = asyncio.run(count(message))
+  result = asyncio.run(count(message))
   cast_message(message_handler, result)
 
 def hello(my_string):

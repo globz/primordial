@@ -9,7 +9,7 @@ defmodule Primordial.Simulation.Prediction do
     case result do
       :failed ->
         IO.puts("Simulation task count failed - Retry...!")
-        dream(int, retry - 1) # We want a clause to match :safe_filter and
+        count(int, retry - 1) # We want a clause to match :safe_filter and
         # potentially modify the prompt + :error
       :error -> # This will not match because we simply return :error
         IO.puts("Simulation task caught error - Retry...!")
@@ -32,10 +32,18 @@ defmodule Primordial.Simulation.Prediction do
         # potentially modify the prompt
       :error ->
         IO.puts("Simulation task caught error - Retry...!")
-        count(prompt, retry - 1)
+        dream(prompt, retry - 1)
       _ ->
         IO.puts("Simulation task succeeded!")
+        # return image filename + path
+        # Another function convert_to_webp will take this result and convert
+        # the image, then another function will log the output to the database
         {:ok, result}
     end
-  end  
+  end
+
+  def test(int) do
+    int + 2
+  end
+  
 end
