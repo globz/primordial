@@ -23,7 +23,7 @@ defmodule Primordial.PythonWorker do
 
   ## Example 
 
-   PythonWorker.call(:my_module, :my_function, my_args) ::
+   PythonWorker.call(:my_module, :my_function, [arg1, arg2]) ::
 
    {:ok,  result} | {:ok, :error}
   
@@ -50,33 +50,49 @@ defmodule Primordial.PythonWorker do
   end
 
   @doc """
-  A Task.async GenServer.cast to :python.cast via erlport wrapped inside a
-  :poolboy.transaction
+  A Task.async GenServer.cast to `:python.cast` via erlport wrapped inside a
+  `:poolboy.transaction`
 
-  ## Example without :continue callback
+  Sends an asynchronous request to the :python instance of :my_module
 
-   PythonWorker.cast(:my_module, message, _callback) :: :ok
+  Optional `dispatch` argument which can be used to dispatch a message
+  received by handle_info({:python, message}) to another Elixir module
 
-  ## Example with :continue callback
+  Return `:ok`
+
+  ## Example without dispatch
+
+   PythonWorker.cast(:my_module, message) :: :ok
+
+  ## Example with dispatch
   
-   Define your callback function: %{callback: callback, args: []}
+   dispatch = %{module: MyModule, fun: :my_fun, args: [arg1, arg2]}
 
-   my_callback = fn n -> MyModule.fun(n) end
+   PythonWorker.cast(:my_module, message, dispatch) :: :ok
 
-   callback = %{callback: my_callback, args: [:message, 3]}
-   
-   PythonWorker.cast(:my_module, message, callback) :: :ok
+  ## Example with dispatch & :message argument
+
+  dispatch = %{module: MyModule, fun: :my_fun, args: [`:message`, arg2]}
+
+  PythonWorker.cast(:my_module, message, dispatch) :: :ok
+
+  This will effectively replace `:message` with the actual message received
+  by handle_info({:python, message}) and will dispatched it to the assigned
+  dispatch module, along with any other arguments.
+
+  The dispatch result is automatically added to the current :python_worker
+  state and can be accessed via PythonWorker.lookup(:result)
   
   """
-  @spec cast(module :: atom(), message :: term(), callback ::term()) :: :ok
-  def cast(module, message, callback \\ %{}) do
+  @spec cast(module :: atom(), message :: term()) :: :ok
+  @spec cast(module :: atom(), message :: term(), dispatch ::term()) :: :ok
+  def cast(module, message, dispatch \\ %{}) do
     Task.async(fn ->
       :poolboy.transaction(
         :python_worker,
         fn pid ->
           try do
-            IO.inspect(pid)
-            GenServer.cast(pid, {:cast, %{module: module, message: message, continue: callback}})
+            GenServer.cast(pid, {:cast, %{module: module, message: message, dispatch: dispatch}})
           catch
             e, r ->
             Logger.info("[#{__MODULE__}] GenServer.cast caught error: #{inspect(e)}, #{inspect(r)}")
@@ -122,18 +138,22 @@ defmodule Primordial.PythonWorker do
       Logger.info("[#{__MODULE__}] Started python worker")
       IO.inspect(pid)
       state = %{
-        continue: nil,
+        dispatch: nil,
         result: nil,
         pid: pid
-      }      
+      }
+      # :poolboy only use one worker when multiple calls are made, should state
+      # be a list?
+      # http://www.davekuhlman.org/elixir-poolboy-erlport-datasci.html
       {:ok, state}
     end
   end
 
   @impl true
   def handle_call({:call, params}, _from, %{pid: pid} = state) do
+    IO.inspect(pid)
     %{module: module, fun: fun, args: args} = params
-    result = :python.call(pid, module, fun, [args])
+    result = :python.call(pid, module, fun, args)
     Logger.info("[#{__MODULE__}] Handled call")
     {:reply, {:ok, result}, state}
   end
@@ -145,30 +165,44 @@ defmodule Primordial.PythonWorker do
 
   @impl true
   def handle_cast({:cast, params}, %{pid: pid} = state) do
-    %{module: module, message: message, continue: continue} = params
+    IO.inspect(pid)
+    %{module: module, message: message, dispatch: dispatch} = params
     :python.call(pid, module, :register_handler, [self()])
     :python.cast(pid, message)
     Logger.info("[#{__MODULE__}] Handled cast")
-    {:noreply, %{state | continue: continue}}
+    {:noreply, %{state | dispatch: dispatch}}
   end
 
   @impl true  
-  def handle_info({:python, message}, %{pid: pid, continue: continue} = state) do
+  def handle_info({:python, message}, %{dispatch: dispatch} = state) do
     Logger.info("[#{__MODULE__}] Handled :python info")
-    IO.inspect(state)
-    IO.inspect(message)
-    if !empty_map?(continue) do
-      # :continue callback detected
-      # Retrieve the :continue callback & args
-      %{callback: callback, args: args} = continue
+
+    if !empty_map?(dispatch) do
+      
+      # :dispatch callback detected
+      # Retrieve the :dispatch callback & args
+      %{module: module, fun: fun, args: args} = dispatch
+
+      # Check for :message inside the args list and replace it with the
+      # actually message value coming from :python
+      processed_args =
+      if :message in args do
+        index_list = Enum.with_index(args)
+        {_, index} = List.keyfind(index_list, :message, 0)
+        List.replace_at(args, index, message)
+      else
+        args
+      end
+            
       # Apply the callback function to the arguments
-      apply = fn(fun, args) -> fun.(args) end
-      result = apply.(callback, args)
+      Logger.info("[#{__MODULE__}] :python handle_info -- dispatched callback")
+      # TODO use Register as a dispatcher https://hexdocs.pm/elixir/1.14.2/Registry.html
+      result = apply(module, fun, processed_args)
+
+      # Store the result into the current :python_worker state and hibernate
       {:noreply, %{state | result: result}, :hibernate}
-      # {:stop, :normal, %{state | result: result}}
-      # {:noreply, state, {:continue, {:callback, message}}}
        else
-         {:stop, :normal, pid}
+         {:noreply, state, :hibernate}
       end
   end
 
@@ -176,23 +210,7 @@ defmodule Primordial.PythonWorker do
   def terminate(_reason, _state) do
     Logger.info("[#{__MODULE__}] Handled terminate")
     :ok
-  end
-  
-
-  # @impl true
-  # def handle_continue({:callback, message}, %{continue: continue} = state) do
-  #   Logger.info("[#{__MODULE__}] Handled :python continue callback")
-  #   IO.inspect(message)
-  #   IO.inspect(state)
-    
-  #   # Retrieve the :continue callback & args
-  #   %{callback: callback, args: args} = continue
-  #   # Apply the callback function to the arguments
-  #   apply = fn(fun, args) -> fun.(args) end
-  #   result = apply.(callback, args)
-
-  #   {:noreply, %{state | result: result}}
-  # end
+  end  
 
   defp empty_map?(map) when map_size(map) == 0, do: true
   defp empty_map?(map) when is_map(map), do: false  

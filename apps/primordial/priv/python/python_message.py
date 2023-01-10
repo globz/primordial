@@ -16,6 +16,7 @@ def register_handler(pid):
 def handle_message(message):
  if message_handler:
   result = asyncio.run(count(message))
+  #result = hello2(message) #TODO test message with 2 arguments
   cast_message(message_handler, result)
 
 def hello(my_string):
@@ -23,6 +24,13 @@ def hello(my_string):
     my_string = my_string.decode("utf-8")
   
   return "Hello world from " + my_string
+
+def hello2(my_string, my_string2):
+  if isinstance(my_string, bytes):
+    my_string = my_string.decode("utf-8")
+    my_string2 = my_string2.decode("utf-8")
+  
+  return "Hello world from " + my_string + my_string2
 
 async def count(count=100):
   #simluate a time consuming python function

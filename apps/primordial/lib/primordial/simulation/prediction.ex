@@ -42,8 +42,12 @@ defmodule Primordial.Simulation.Prediction do
     end
   end
 
-  def test(int) do
-    int + 2
+  def test(arg) do
+    {:ok, arg}
   end
+
+  def test2(arg1, arg2) do
+    {:ok, [arg1, arg2]}
+  end  
   
 end
