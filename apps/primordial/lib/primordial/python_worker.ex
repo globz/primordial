@@ -9,9 +9,11 @@ defmodule Primordial.PythonWorker do
   """
   use GenServer
 
+  alias Primordial.AsyncRegistry
+
   require Logger
 
-  @timeout 25_000
+  @default_timeout 25_000
 
   def start_link(_) do
     GenServer.start_link(__MODULE__, nil)
@@ -29,13 +31,14 @@ defmodule Primordial.PythonWorker do
   
   """
   @spec call(module :: atom(), function :: atom(), args :: any()) :: result :: atom()
-  def call(module, fun, args) do
+  def call(module, fun, args, timeout \\ @default_timeout) do
     Task.async(fn ->
       :poolboy.transaction(
         :python_worker,
         fn pid ->
+          IO.inspect(pid)
           try do            
-            GenServer.call(pid, {:call, %{module: module, fun: fun, args: args}}, @timeout)
+            GenServer.call(pid, {:call, %{module: module, fun: fun, args: args}}, timeout)
           catch
             e, r ->
             Logger.info("[#{__MODULE__}] GenServer.call caught error: #{inspect(e)}, #{inspect(r)}")
@@ -84,35 +87,16 @@ defmodule Primordial.PythonWorker do
   state and can be accessed via PythonWorker.lookup(:result)
   
   """
-  @spec cast(module :: atom(), message :: term()) :: :ok
-  @spec cast(module :: atom(), message :: term(), dispatch ::term()) :: :ok
-  def cast(module, message, dispatch \\ %{}) do
+  #@spec cast(module :: atom(), message :: term()) :: :ok
+  #@spec cast(module :: atom(), message :: term(), dispatch ::term()) :: :ok
+  def cast(module, message, lookup \\ nil) do
     Task.async(fn ->
       :poolboy.transaction(
         :python_worker,
         fn pid ->
+          IO.inspect(pid)
           try do
-            GenServer.cast(pid, {:cast, %{module: module, message: message, dispatch: dispatch}})
-          catch
-            e, r ->
-            Logger.info("[#{__MODULE__}] GenServer.cast caught error: #{inspect(e)}, #{inspect(r)}")
-            Process.exit(pid, :kill)
-            {:ok, :error}
-          end
-       end,
-        :infinity
-      )
-    end) #https://dev.to/felipearaujos/the-power-of-elixir-task-module-54np
-    |> Task.await(:infinity)
-  end
-
-  def lookup(key) do
-    Task.async(fn ->
-      :poolboy.transaction(
-        :python_worker,
-        fn pid ->
-          try do            
-            GenServer.call(pid, {:lookup, key}, @timeout)
+            GenServer.cast(pid, {:cast, %{module: module, message: message, lookup: lookup}})
           catch
             e, r ->
             Logger.info("[#{__MODULE__}] GenServer.cast caught error: #{inspect(e)}, #{inspect(r)}")
@@ -126,6 +110,10 @@ defmodule Primordial.PythonWorker do
     |> Task.await(:infinity)
   end
 
+  def lookup(key, timeout \\ @default_timeout) do
+    AsyncRegistry.get(key, timeout)
+  end
+  
   ## Server callbacks
   
   @impl true
@@ -135,11 +123,9 @@ defmodule Primordial.PythonWorker do
       |> Path.join()
 
     with {:ok, pid} <- :python.start([{:python_path, to_charlist(path)}, {:python, 'python3'}]) do
-      Logger.info("[#{__MODULE__}] Started python worker")
-      IO.inspect(pid)
+      Logger.info("[#{__MODULE__}] Started python worker #{inspect pid}")
       state = %{
-        dispatch: nil,
-        result: nil,
+        lookup: nil,
         pid: pid
       }
       # :poolboy only use one worker when multiple calls are made, should state
@@ -151,67 +137,46 @@ defmodule Primordial.PythonWorker do
 
   @impl true
   def handle_call({:call, params}, _from, %{pid: pid} = state) do
-    IO.inspect(pid)
     %{module: module, fun: fun, args: args} = params
     result = :python.call(pid, module, fun, args)
-    Logger.info("[#{__MODULE__}] Handled call")
+    Logger.info("[#{__MODULE__}] Handled call #{inspect pid}")
     {:reply, {:ok, result}, state}
   end
 
   @impl true
-  def handle_call({:lookup, key}, _from, state) do
-    {:reply, Map.fetch(state, key), state}
-  end  
-
-  @impl true
   def handle_cast({:cast, params}, %{pid: pid} = state) do
     IO.inspect(pid)
-    %{module: module, message: message, dispatch: dispatch} = params
+    %{module: module, message: message, lookup: lookup} = params
     :python.call(pid, module, :register_handler, [self()])
     :python.cast(pid, message)
-    Logger.info("[#{__MODULE__}] Handled cast")
-    {:noreply, %{state | dispatch: dispatch}}
+    Logger.info("[#{__MODULE__}] Handled cast #{inspect pid}")
+    :poolboy.checkout(:python_worker, pid)
+    {:noreply, %{state | lookup: lookup}}
   end
 
   @impl true  
-  def handle_info({:python, message}, %{dispatch: dispatch} = state) do
-    Logger.info("[#{__MODULE__}] Handled :python info")
+  def handle_info({:python, message}, %{pid: pid, lookup: lookup} = state) do
+    Logger.info("[#{__MODULE__}] Handled :python info #{inspect pid}")
+    IO.inspect(lookup)
+    # Lookup key detected
+    # Store the result into the AsyncRegistry
+    if !is_nil(lookup), do: AsyncRegistry.set(lookup, message)
 
-    if !empty_map?(dispatch) do
-      
-      # :dispatch callback detected
-      # Retrieve the :dispatch callback & args
-      %{module: module, fun: fun, args: args} = dispatch
-
-      # Check for :message inside the args list and replace it with the
-      # actually message value coming from :python
-      processed_args =
-      if :message in args do
-        index_list = Enum.with_index(args)
-        {_, index} = List.keyfind(index_list, :message, 0)
-        List.replace_at(args, index, message)
-      else
-        args
-      end
-            
-      # Apply the callback function to the arguments
-      Logger.info("[#{__MODULE__}] :python handle_info -- dispatched callback")
-      # TODO use Register as a dispatcher https://hexdocs.pm/elixir/1.14.2/Registry.html
-      result = apply(module, fun, processed_args)
-
-      # Store the result into the current :python_worker state and hibernate
-      {:noreply, %{state | result: result}, :hibernate}
-       else
-         {:noreply, state, :hibernate}
-      end
+    {:noreply, %{state | lookup: nil}, :hibernate}
   end
 
   @impl true
   def terminate(_reason, _state) do
     Logger.info("[#{__MODULE__}] Handled terminate")
     :ok
-  end  
-
-  defp empty_map?(map) when map_size(map) == 0, do: true
-  defp empty_map?(map) when is_map(map), do: false  
+  end
 end
+
+# TODO
+
+# Investigate why poolboy only use one worker
+# Fix lookup key being overwritten, should track it with make_ref and python
+# message should send back the ref along with the result
+# or checkout workers on cast and re-enable them when a message is
+# received....however if no response is expected then do not checkout the
+# worker, then simply check back the worker once the response is received!

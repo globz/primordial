@@ -12,8 +12,11 @@ defmodule Primordial.Application do
       Primordial.Repo,
       # Start the PubSub system
       {Phoenix.PubSub, name: Primordial.PubSub},
-      # Start a worker by calling: Primordial.Worker.start_link(arg)
-      # {Primordial.Worker, arg}      
+      # Start the Primordial PubSub registry system
+      {Registry, keys: :duplicate, name: Primordial.Registry.PubSub},
+      # Start the Primordial AsyncRegistry system
+      Primordial.AsyncRegistry,
+      # Start poolboy :python_worker
       :poolboy.child_spec(:worker, python_poolboy_config())
     ]
 
