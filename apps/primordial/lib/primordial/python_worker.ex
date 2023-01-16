@@ -133,13 +133,14 @@ defmodule Primordial.PythonWorker do
 
    timeout = 5_000
 
-   result = PythonWorker.lookup(:my_lookup_key, timeout) :: term()
+   {:ok, result} = PythonWorker.lookup(:my_lookup_key, timeout) :: {:ok, term()}
 
   """
 
-  @spec lookup(key :: atom(), timeout :: timeout()) :: term()
+  @spec lookup(key :: atom(), timeout :: timeout()) :: {:ok, term()}
   def lookup(key, timeout \\ @default_timeout) do
-    AsyncRegistry.get(key, timeout)
+    message = AsyncRegistry.get(key, timeout)
+    {:ok, message}
   end
 
   @doc """

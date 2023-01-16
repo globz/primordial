@@ -2,11 +2,22 @@ import os
 import io
 from PIL import Image
 from pathlib import Path
-from erlport.erlterms import Atom
 from stability_sdk import client
+from erlport.erlterms import Atom
+from erlport.erlang import set_message_handler, cast
 import stability_sdk.interfaces.gooseai.generation.generation_pb2 as generation
 
-# dependency pip install stability-sdk
+def cast_message(pid, result):
+ cast(pid, (Atom(b'python'), result))
+ 
+def register_handler(pid):
+ global message_handler
+ message_handler = pid
+ 
+def handle_message(message):
+ if message_handler:
+  result = dream_studio_api(message)
+  cast_message(message_handler, result)
 
 # Stability Host URL
 os.environ['STABILITY_HOST'] = 'grpc.stability.ai:443'
@@ -46,9 +57,7 @@ def dream_studio_api(prompt_content):
     for resp in answers:
         for artifact in resp.artifacts:
             if artifact.finish_reason == generation.FILTER:
-                warnings.warn(
-                    "Your request activated the API's safety filters and could not be processed."
-                    "Please modify the prompt and try again.")
+                Atom(b'safe_filter')
             if artifact.type == generation.ARTIFACT_IMAGE:
                 img = Image.open(io.BytesIO(artifact.binary))
                 img_name = str(artifact.seed)+".png"
@@ -61,4 +70,4 @@ def dream_studio_api(prompt_content):
                 img.save(img_name) # Save our generated images with their seed number as the filename.
                 return img_name
 
-
+set_message_handler(handle_message)
