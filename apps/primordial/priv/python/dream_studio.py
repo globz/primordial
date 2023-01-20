@@ -8,7 +8,6 @@ from erlport.erlterms import Atom
 from erlport.erlang import set_message_handler, cast
 import stability_sdk.interfaces.gooseai.generation.generation_pb2 as generation
 
-
 def cast_message(pid, result):
  cast(pid, (Atom(b'python'), result))
  
@@ -18,17 +17,30 @@ def register_handler(pid):
  
 def handle_message(message):
  if message_handler:
-  message = list_decoder(message)
+  # Decode Elixir's list to Python Dict
+  message = list_decoder(message) 
   result = dream_studio_api(message)
   cast_message(message_handler, result)
 
 # Stability Host URL
 os.environ['STABILITY_HOST'] = 'grpc.stability.ai:443'
 
-def dream_studio_api(prompt_content):
+def dream_studio_api(config):
 
+    prompt_content = config[Atom(b'prompt')]
+    output_path = config[Atom(b'path')]
+    # Default format to .png if no other format was provided
+    config.setdefault(Atom(b'format'), ".png")
+    output_format = config[Atom(b'format')]
+    
     if isinstance(prompt_content, bytes):
-        prompt_content = prompt_content.decode("utf-8")
+     prompt_content = prompt_content.decode("utf-8")
+
+    if isinstance(output_path, bytes):
+     output_path = output_path.decode("utf-8")
+
+    if isinstance(output_format, bytes):
+     output_format = output_format.decode("utf-8")
     
     # Set up our connection to the API.
     stability_api = client.StabilityInference(
@@ -60,17 +72,27 @@ def dream_studio_api(prompt_content):
     for resp in answers:
         for artifact in resp.artifacts:
             if artifact.finish_reason == generation.FILTER:
-                Atom(b'safe_filter')
+             Atom(b'safe_filter')
             if artifact.type == generation.ARTIFACT_IMAGE:
-                img = Image.open(io.BytesIO(artifact.binary))
-                img_name = str(artifact.seed)+".png"
-                dir_path = Path("apps/primordial_web/priv/static/images/simulation")
+             img = Image.open(io.BytesIO(artifact.binary))
+             img_name = str(artifact.seed)+".png"
+             dir_path = Path(output_path)
 
-                # Switch working directory
-                if 'simulation' not in os.getcwd():
-                    os.chdir(dir_path)
-                    
-                img.save(img_name) # Save our generated images with their seed number as the filename.
-                return img_name
+             # Switch working directory
+             if 'simulation' not in os.getcwd():
+              os.chdir(dir_path)
+
+             # Save our generated images with their seed number as the filename.
+             img.save(img_name)
+
+             if output_format != ".png":
+              source = Path(img_name)
+              convert_destination = source.with_suffix("."+output_format)
+              png_image = Image.open(source)
+              png_image.save(convert_destination, format=str(output_format))
+              img_name = str(artifact.seed)+"."+output_format
+              os.remove(source)
+              
+             return img_name
 
 set_message_handler(handle_message)
