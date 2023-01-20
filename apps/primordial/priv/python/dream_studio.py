@@ -3,9 +3,11 @@ import io
 from PIL import Image
 from pathlib import Path
 from stability_sdk import client
+from list_type import list_decoder
 from erlport.erlterms import Atom
 from erlport.erlang import set_message_handler, cast
 import stability_sdk.interfaces.gooseai.generation.generation_pb2 as generation
+
 
 def cast_message(pid, result):
  cast(pid, (Atom(b'python'), result))
@@ -16,6 +18,7 @@ def register_handler(pid):
  
 def handle_message(message):
  if message_handler:
+  message = list_decoder(message)
   result = dream_studio_api(message)
   cast_message(message_handler, result)
 

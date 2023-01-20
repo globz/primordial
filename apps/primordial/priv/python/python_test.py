@@ -1,8 +1,8 @@
 from erlport.erlang import set_message_handler, cast
 from erlport.erlterms import Atom
+from list_type import list_decoder
 import time
 import sys
-import asyncio
 
 message_handler = None
 
@@ -15,9 +15,8 @@ def register_handler(pid):
  
 def handle_message(message):
  if message_handler:
+  message = list_decoder(message)
   result = testarg2(message)
-  #result = asyncio.run(count(message))
-  #result = hello2(message) #TODO test message with 2 arguments
   cast_message(message_handler, result)
 
 def hello(my_string):
@@ -33,12 +32,12 @@ def hello2(my_string, my_string2):
   
   return "Hello world from " + my_string + my_string2
 
-async def count(count=100):
+def count(count=100):
   #simluate a time consuming python function
   i = 0
   data = []
   while i < count:
-    await asyncio.sleep(1)
+    time.sleep(1)
     data.append(i+1)
     i = i + 1
   return data
@@ -56,26 +55,5 @@ def testarg3(arg):
  t = str(type(arg))
  s = str(arg)
  return [t, s]
-
-def myasync(count=100):
- return asyncio.run(count2(count))
- 
-def count2(count=100):
-  #simluate a time consuming python function
-  i = 0
-  data = []
-  if (count == 2):
-   # cast_message(message_handler, 1)
-   return Atom(b'failed')
-  while i < count:
-    # await asyncio.sleep(1)
-    time.sleep(1) #sleep for 1 sec
-    data.append(i+1)
-    i = i + 1
-  return data 
-
-
-# if __name__ == '__main__':
-#   print(hello("Python"))
-
+  
 set_message_handler(handle_message)
