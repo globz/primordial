@@ -15,7 +15,8 @@ def register_handler(pid):
  
 def handle_message(message):
  if message_handler:
-  result = asyncio.run(count(message))
+  result = testarg2(message)
+  #result = asyncio.run(count(message))
   #result = hello2(message) #TODO test message with 2 arguments
   cast_message(message_handler, result)
 
@@ -42,6 +43,19 @@ async def count(count=100):
     i = i + 1
   return data
 
+def testarg(arg):
+ dict1 = dict([(arg[0]), (arg[1]), (arg[2])])
+ t = str(type(arg))
+ s = str(dict1)
+ return dict1[Atom(b'prompt')]
+
+def testarg2(arg):
+ return arg[Atom(b'format')]
+
+def testarg3(arg):
+ t = str(type(arg))
+ s = str(arg)
+ return [t, s]
 
 def myasync(count=100):
  return asyncio.run(count2(count))
