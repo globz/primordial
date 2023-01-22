@@ -92,13 +92,13 @@ defmodule Primordial.PythonWorker do
   """
   @spec cast(module :: atom(), message :: term()) :: :ok
   @spec cast(module :: atom(), message :: term(), lookup :: atom()) :: :ok
-  def cast(module, message, lookup \\ nil) do
+  def cast(module, message, lookup \\ nil, timeout \\ @default_timeout) do
     Task.async(fn ->
       :poolboy.transaction(
         :python_worker,
         fn pid ->
           try do
-            GenServer.cast(pid, {:cast, %{module: module, message: message, lookup: lookup}})
+            GenServer.cast(pid, {:cast, %{module: module, message: message, lookup: lookup, timeout: timeout}})
           catch
             e, r ->
             Logger.info("[#{__MODULE__}] GenServer.cast caught error: #{inspect(e)}, #{inspect(r)}")
@@ -140,7 +140,12 @@ defmodule Primordial.PythonWorker do
   @spec lookup(key :: atom(), timeout :: timeout()) :: {:ok, term()}
   def lookup(key, timeout \\ @default_timeout) do
     message = AsyncRegistry.get(key, timeout)
-    {:ok, message}
+    case message do
+      {:error, :timeout} ->
+        {:error, :timeout}
+      message ->        
+        {:ok, message}
+    end    
   end
 
   @doc """
@@ -179,7 +184,7 @@ defmodule Primordial.PythonWorker do
 
   @impl true
   def handle_cast({:cast, params}, %{pid: pid} = state) do
-    %{module: module, message: message, lookup: lookup} = params
+    %{module: module, message: message, lookup: lookup, timeout: timeout} = params
     :python.call(pid, module, :register_handler, [self()])
     :python.cast(pid, message)
     Logger.info("[#{__MODULE__}] Handled cast #{inspect pid}")
@@ -187,7 +192,7 @@ defmodule Primordial.PythonWorker do
     # Checkout current worker if cast is expecting an async lookup
     lookup_checkout(lookup)
 
-    {:noreply, %{state | lookup: lookup}}
+    {:noreply, %{state | lookup: lookup}, timeout}
   end
 
   @impl true  
@@ -202,8 +207,13 @@ defmodule Primordial.PythonWorker do
   end
 
   @impl true
+  def handle_info(:timeout, state) do
+    {:stop, :timeout, state}
+  end
+  
+  @impl true
   def terminate(_reason, _state) do
-    Logger.info("[#{__MODULE__}] Handled terminate")
+    Logger.info("[#{__MODULE__}] Handle info terminate")
     :ok
   end
 

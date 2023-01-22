@@ -1,7 +1,7 @@
 defmodule Primordial.AsyncRegistry do
   use GenServer
   @default_timeout 1_000
-  @registry Primordial.Registry.PubSub 
+  @registry Primordial.Registry.PubSub
   
   def set(key, value),
     do: GenServer.cast(__MODULE__, {:set, key, value})
@@ -12,6 +12,10 @@ defmodule Primordial.AsyncRegistry do
       value -> value
     end
   end
+
+  def del(key),
+    do: GenServer.call(__MODULE__, {:del, key})
+  
   
   defp wait(registry, topic, timeout) do
     Registry.register(registry, topic, [])
@@ -34,6 +38,12 @@ defmodule Primordial.AsyncRegistry do
     reply = Map.get(state, key, {:wait, @registry, key})
     {:reply, reply, state}
   end
+
+  def handle_call({:del, key}, _from, state) do
+    Registry.unregister(@registry, key)
+    new_state = Map.delete(state, key)
+    {:reply, :ok, new_state}
+  end  
   
   def handle_cast({:set, key, value}, state) do
     broadcast(key, value)

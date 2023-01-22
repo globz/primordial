@@ -3,15 +3,18 @@ defmodule Primordial.Simulation.Prediction do
 
   require Logger
 
-  def dream(int, retry \\ 3)
-  def dream(_arg, _retry = 0), do: :ignore
+  @default_timeout 25_000
 
-  def dream(config, retry) do
-    PythonWorker.cast(:dream_studio, config, :dream)
-    case PythonWorker.lookup(:dream, 25_000) do
+  def dream(int, retry \\ 3, timeout \\ @default_timeout)
+  def dream(_arg, _retry = 0, _timeout), do: :ignore
+
+  def dream(config, retry, timeout) do
+    PythonWorker.cast(:dream_studio, config, :dream, timeout)
+    case PythonWorker.lookup(:dream, timeout) do
       {:error, :timeout} ->
         Logger.info("[#{__MODULE__}] Timeout")
-        # Increase timeout by +5_000?
+        # Increase each timeout by 5000 for a max run time of 35_000
+        dream(config, retry - 1, timeout + 5000) 
       {:ok, :safe_filter} ->
         Logger.info("[#{__MODULE__}] Triggered safe_filter")
         # Modify negative prompt?
@@ -31,7 +34,7 @@ defmodule Primordial.Simulation.Prediction do
     ]
     
     with {:ok, result} <- dream(dream_config) do
-      IO.puts(result)
+      IO.puts("with result  #{result}")
     end    
   end  
 end

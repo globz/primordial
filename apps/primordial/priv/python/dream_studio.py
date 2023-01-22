@@ -1,5 +1,6 @@
 import os
 import io
+import time # remove me
 from PIL import Image
 from pathlib import Path
 from stability_sdk import client
@@ -19,7 +20,8 @@ def handle_message(message):
  if message_handler:
   # Decode Elixir's list to Python Dict
   message = list_decoder(message) 
-  result = dream_studio_api(message)
+  #result = dream_studio_api(message)
+  result = test()
   cast_message(message_handler, result)
 
 # Stability Host URL
@@ -94,5 +96,9 @@ def dream_studio_api(config):
               os.remove(source)
               
              return img_name
+
+def test():
+ time.sleep(30)
+ return "too late"
 
 set_message_handler(handle_message)
