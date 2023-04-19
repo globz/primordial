@@ -6,15 +6,23 @@ defmodule PrimordialWeb.SwipeLive do
   @impl true
   def render(assigns) do
     ~H"""
+      <%= if @view_to_show == :swipe_animation do %>
+        <.live_component
+          module={PrimordialWeb.Animations.SwipeAnimationComponent}
+          id={"swipe-animation-component"}
+          reader_state={@reader_state}
+        />
+      <% end %>
       <%= if @view_to_show == :authenticated do %>
-           <.live_component
-             module={PrimordialWeb.UserObjects.IdCardComponent}
-             id={@user.id}
-             user={@user}
-             token={@token}
-             context={@context}
-           />
-      <% else %>
+        <.live_component
+          module={PrimordialWeb.UserObjects.IdCardComponent}
+          id={@user.id}
+          user={@user}
+          token={@token}
+          context={@context}
+        />
+      <% end %>
+      <%= if @view_to_show == :error do %>
         If you previously exported your authentication Token, you may
          <%= live_redirect "import", to: Routes.import_path(@socket, :import) %>
         it or
@@ -31,19 +39,23 @@ defmodule PrimordialWeb.SwipeLive do
         {:ok, assign(socket,
             user: Accounts.get_user!(user_id),
             token: token,
-            view_to_show: :authenticated,
+            view_to_show: :swipe_animation,
+            reader_state: :valid,
             context: :swipe)}
 
       {:error, :expired} ->
-        {:ok, assign(socket, error: "This ID card has expired!", view_to_show: :error)}
+        {:ok, assign(socket, error: "This ID card has expired!", view_to_show: :swipe_animation, reader_state: :invalid)}
+        # {:ok, assign(socket, error: "This ID card has expired!", view_to_show: :error)}
 
       {:error, :invalid} ->
-        {:ok, assign(socket, error: "There is something wrong with your ID card!", view_to_show: :error)}
+        {:ok, assign(socket, error: "There is something wrong with your ID card!", view_to_show: :swipe_animation, reader_state: :invalid)}
+        # {:ok, assign(socket, error: "There is something wrong with your ID card!", view_to_show: :error)}
     end
   end
 
-  def mount(_params, %{}, socket) do    
-    {:ok, assign(socket, error: "You do not own an ID card, you must enroll first.", view_to_show: :error)}
+  def mount(_params, %{}, socket) do
+    {:ok, assign(socket, error: "You do not own an ID card, you must enroll first.", view_to_show: :swipe_animation, reader_state: :invalid)}    
+    # {:ok, assign(socket, error: "You do not own an ID card, you must enroll first.", view_to_show: :error)}
   end  
 
   @impl true
@@ -59,5 +71,15 @@ defmodule PrimordialWeb.SwipeLive do
       _ ->
         put_flash(socket, :info, "Authentication successful!")
     end
+  end
+
+  @impl true
+  def handle_info(:swipe_accepted, socket) do  
+    {:noreply, assign(socket, view_to_show: :authenticated)}
+  end
+
+  @impl true
+  def handle_info(:swipe_denied, socket) do  
+    {:noreply, assign(socket, view_to_show: :error)}
   end
 end
