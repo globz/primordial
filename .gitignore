@@ -27,3 +27,9 @@ erl_crash.dump
 
 # python cache
 /apps/primordial/priv/python/__pycache__/
+
+# python .venv
+.venv
+
+# postgres logfile
+logile

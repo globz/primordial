@@ -2,61 +2,80 @@ defmodule PrimordialWeb.SwipeLive do
   use PrimordialWeb, :live_view
 
   alias Primordial.Accounts
-  #action={@live_action}
+  # action={@live_action}
   @impl true
   def render(assigns) do
     ~H"""
-      <%= if @view_to_show == :swipe_animation do %>
-        <.live_component
-          module={PrimordialWeb.Animations.SwipeAnimationComponent}
-          id={"swipe-animation-component"}
-          reader_state={@reader_state}
-        />
-      <% end %>
-      <%= if @view_to_show == :authenticated do %>
-        <.live_component
-          module={PrimordialWeb.UserObjects.IdCardComponent}
-          id={@user.id}
-          user={@user}
-          token={@token}
-          context={@context}
-        />
-      <% end %>
-      <%= if @view_to_show == :error do %>
-        If you previously exported your authentication Token, you may
-         <%= live_redirect "import", to: Routes.import_path(@socket, :import) %>
-        it or
-        <%= live_redirect "enroll", to: Routes.enroll_user_index_path(@socket, :new) %>
-        now.
-      <% end %>
+    <%= if @view_to_show == :swipe_animation do %>
+      <.live_component
+        module={PrimordialWeb.Animations.SwipeAnimationComponent}
+        id="swipe-animation-component"
+        reader_state={@reader_state}
+      />
+    <% end %>
+    <%= if @view_to_show == :authenticated do %>
+      <.live_component
+        module={PrimordialWeb.UserObjects.IdCardComponent}
+        id={@user.id}
+        user={@user}
+        token={@token}
+        context={@context}
+      />
+    <% end %>
+    <%= if @view_to_show == :error do %>
+      If you previously exported your authentication Token, you may
+      <.link href={~p"/import"}>import</.link>
+      it or <.link href={~p"/enroll/users"}>enroll</.link>
+      now.
+    <% end %>
     """
   end
-  
+
   @impl true
   def mount(_params, %{"token" => token}, socket) do
     case Accounts.Token.verify(PrimordialWeb.Endpoint, token) do
       {:ok, user_id} ->
-        {:ok, assign(socket,
-            user: Accounts.get_user!(user_id),
-            token: token,
-            view_to_show: :swipe_animation,
-            reader_state: :valid,
-            context: :swipe)}
+        {:ok,
+         assign(socket,
+           user: Accounts.get_user!(user_id),
+           token: token,
+           view_to_show: :swipe_animation,
+           reader_state: :valid,
+           context: :swipe
+         )}
 
       {:error, :expired} ->
-        {:ok, assign(socket, error: "This ID card has expired!", view_to_show: :swipe_animation, reader_state: :invalid)}
-        # {:ok, assign(socket, error: "This ID card has expired!", view_to_show: :error)}
+        {:ok,
+         assign(socket,
+           error: "This ID card has expired!",
+           view_to_show: :swipe_animation,
+           reader_state: :invalid
+         )}
+
+      # {:ok, assign(socket, error: "This ID card has expired!", view_to_show: :error)}
 
       {:error, :invalid} ->
-        {:ok, assign(socket, error: "There is something wrong with your ID card!", view_to_show: :swipe_animation, reader_state: :invalid)}
+        {:ok,
+         assign(socket,
+           error: "There is something wrong with your ID card!",
+           view_to_show: :swipe_animation,
+           reader_state: :invalid
+         )}
+
         # {:ok, assign(socket, error: "There is something wrong with your ID card!", view_to_show: :error)}
     end
   end
 
   def mount(_params, %{}, socket) do
-    {:ok, assign(socket, error: "You do not own an ID card, you must enroll first.", view_to_show: :swipe_animation, reader_state: :invalid)}    
+    {:ok,
+     assign(socket,
+       error: "You do not own an ID card, you must enroll first.",
+       view_to_show: :swipe_animation,
+       reader_state: :invalid
+     )}
+
     # {:ok, assign(socket, error: "You do not own an ID card, you must enroll first.", view_to_show: :error)}
-  end  
+  end
 
   @impl true
   def handle_params(params, _url, socket) do
@@ -74,12 +93,12 @@ defmodule PrimordialWeb.SwipeLive do
   end
 
   @impl true
-  def handle_info(:swipe_accepted, socket) do  
+  def handle_info(:swipe_accepted, socket) do
     {:noreply, assign(socket, view_to_show: :authenticated)}
   end
 
   @impl true
-  def handle_info(:swipe_denied, socket) do  
+  def handle_info(:swipe_denied, socket) do
     {:noreply, assign(socket, view_to_show: :error)}
   end
 end

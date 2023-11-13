@@ -1,7 +1,7 @@
 defmodule Primordial.PythonWorker do
   @moduledoc """
   Supervised PythonWorker managed by :poolboy
-  
+
   ## Desc
   GenServer interface for :python via erlport & :poolboy.transaction
   ## Pool
@@ -35,24 +35,32 @@ defmodule Primordial.PythonWorker do
    PythonWorker.call(:my_module, :my_function, [arg1, arg2], 10_000) ::
 
    {:ok,  result} | {:ok, :error}
-  
+
   """
-  @spec call(module :: atom(), function :: atom(), args :: list(), timeout ::
-  timeout()) :: {:ok, term()} | {:ok, :error}
+  @spec call(
+          module :: atom(),
+          function :: atom(),
+          args :: list(),
+          timeout ::
+            timeout()
+        ) :: {:ok, term()} | {:ok, :error}
   def call(module, fun, args, timeout \\ @default_timeout) do
     Task.async(fn ->
       :poolboy.transaction(
         :python_worker,
         fn pid ->
-          try do            
+          try do
             GenServer.call(pid, {:call, %{module: module, fun: fun, args: args}}, timeout)
           catch
             e, r ->
-            Logger.info("[#{__MODULE__}] GenServer.call caught error: #{inspect(e)}, #{inspect(r)}")
-            Process.exit(pid, :kill)
-            {:ok, :error}
+              Logger.info(
+                "[#{__MODULE__}] GenServer.call caught error: #{inspect(e)}, #{inspect(r)}"
+              )
+
+              Process.exit(pid, :kill)
+              {:ok, :error}
           end
-       end,
+        end,
         :infinity
       )
     end)
@@ -78,7 +86,7 @@ defmodule Primordial.PythonWorker do
    PythonWorker.cast(:my_module, message) :: :ok
 
   ## Example with lookup
-  
+
    PythonWorker.cast(:my_module, message, :my_lookup_key) :: :ok
 
    Now you may read `:my_lookup_key` with the following command:
@@ -88,7 +96,7 @@ defmodule Primordial.PythonWorker do
   If the value of `:my_lookup_key` is not yet available, the calling process
   will be automatically subscribed to the topic of `:my_lookup_key` and will
   eventually receive the response or timeout
-  
+
   """
   @spec cast(module :: atom(), message :: term()) :: :ok
   @spec cast(module :: atom(), message :: term(), lookup :: atom()) :: :ok
@@ -98,14 +106,20 @@ defmodule Primordial.PythonWorker do
         :python_worker,
         fn pid ->
           try do
-            GenServer.cast(pid, {:cast, %{module: module, message: message, lookup: lookup, timeout: timeout}})
+            GenServer.cast(
+              pid,
+              {:cast, %{module: module, message: message, lookup: lookup, timeout: timeout}}
+            )
           catch
             e, r ->
-            Logger.info("[#{__MODULE__}] GenServer.cast caught error: #{inspect(e)}, #{inspect(r)}")
-            Process.exit(pid, :kill)
-            {:ok, :error}
+              Logger.info(
+                "[#{__MODULE__}] GenServer.cast caught error: #{inspect(e)}, #{inspect(r)}"
+              )
+
+              Process.exit(pid, :kill)
+              {:ok, :error}
           end
-       end,
+        end,
         :infinity
       )
     end)
@@ -140,36 +154,43 @@ defmodule Primordial.PythonWorker do
   @spec lookup(key :: atom(), timeout :: timeout()) :: {:ok, term()}
   def lookup(key, timeout \\ @default_timeout) do
     message = AsyncRegistry.get(key, timeout)
+
     case message do
-      {:error, :timeout} ->
-        {:error, :timeout}
-      message ->        
+      {:ok, :timeout} ->
+        {:ok, :timeout}
+
+      message ->
         {:ok, message}
-    end    
+    end
   end
 
   @doc """
   Returns the current pool status
-  """  
+  """
   def pool_status() do
     :poolboy.status(:python_worker)
   end
-  
-  
+
   ## Server callbacks
-  
+
   @impl true
   def init(_) do
     path =
       [:code.priv_dir(:primordial), "python"]
       |> Path.join()
 
-    with {:ok, pid} <- :python.start([{:python_path, to_charlist(path)}, {:python, 'python3'}]) do
-      Logger.info("[#{__MODULE__}] Started python worker instance #{inspect pid}")
+    with {:ok, pid} <-
+           :python.start([
+             {:python_path, to_charlist(path)},
+             {:python, ~c"/home/globz/primordial/.venv/bin/python3"}
+           ]) do
+      Logger.info("[#{__MODULE__}] Started python worker instance #{inspect(pid)}")
+
       state = %{
         lookup: nil,
         pid: pid
       }
+
       {:ok, state}
     end
   end
@@ -178,7 +199,7 @@ defmodule Primordial.PythonWorker do
   def handle_call({:call, params}, _from, %{pid: pid} = state) do
     %{module: module, fun: fun, args: args} = params
     result = :python.call(pid, module, fun, args)
-    Logger.info("[#{__MODULE__}] Handled call #{inspect pid}")
+    Logger.info("[#{__MODULE__}] Handled call #{inspect(pid)}")
     {:reply, {:ok, result}, state}
   end
 
@@ -187,17 +208,17 @@ defmodule Primordial.PythonWorker do
     %{module: module, message: message, lookup: lookup, timeout: timeout} = params
     :python.call(pid, module, :register_handler, [self()])
     :python.cast(pid, message)
-    Logger.info("[#{__MODULE__}] Handled cast #{inspect pid}")
+    Logger.info("[#{__MODULE__}] Handled cast #{inspect(pid)}")
 
     # Checkout current worker if cast is expecting an async lookup
-    lookup_checkout(lookup)
+    lookup_checkout(lookup, pid)
 
     {:noreply, %{state | lookup: lookup}, timeout}
   end
 
-  @impl true  
+  @impl true
   def handle_info({:python, message}, %{pid: pid, lookup: lookup} = state) do
-    Logger.info("[#{__MODULE__}] Handled :python info #{inspect pid}")
+    Logger.info("[#{__MODULE__}] Handled :python info #{inspect(pid)}")
 
     # Store message into the AsyncRegistry under the lookup key
     # check the worker back into the process pool
@@ -210,21 +231,29 @@ defmodule Primordial.PythonWorker do
   def handle_info(:timeout, state) do
     {:stop, :timeout, state}
   end
-  
+
   @impl true
   def terminate(_reason, _state) do
     Logger.info("[#{__MODULE__}] Handle info terminate")
     :ok
   end
 
-  defp lookup_checkout(lookup) do
-    if !is_nil(lookup), do: (:poolboy.checkout(:python_worker, self());
-    Logger.info("[#{__MODULE__}] :poolboy.checkout python_worker: #{inspect self()}"))
+  defp lookup_checkout(lookup, pid) do
+    if !is_nil(lookup),
+      do:
+        (
+          :poolboy.checkout(:python_worker, pid)
+          Logger.info("[#{__MODULE__}] :poolboy.checkout python_worker: #{inspect(self())}")
+        )
   end
 
   defp lookup_checkin(lookup, message) do
-    if !is_nil(lookup), do: (AsyncRegistry.set(lookup, message);
-      :poolboy.checkin(:python_worker, self());
-      Logger.info("[#{__MODULE__}] :poolboy.checkin python_worker: #{inspect self()}"))    
+    if !is_nil(lookup),
+      do:
+        (
+          AsyncRegistry.set(lookup, message)
+          :poolboy.checkin(:python_worker, self())
+          Logger.info("[#{__MODULE__}] :poolboy.checkin python_worker: #{inspect(self())}")
+        )
   end
 end

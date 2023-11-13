@@ -16,6 +16,9 @@ defmodule PrimordialWeb do
   below. Instead, define any helper function in modules
   and import those modules here.
   """
+  def static_paths do
+    ~w(assets fonts images favicon.ico robots.txt)
+  end
 
   def controller do
     quote do
@@ -24,6 +27,7 @@ defmodule PrimordialWeb do
       import Plug.Conn
       import PrimordialWeb.Gettext
       alias PrimordialWeb.Router.Helpers, as: Routes
+      unquote(verified_routes())
     end
   end
 
@@ -99,6 +103,16 @@ defmodule PrimordialWeb do
       import PrimordialWeb.ErrorHelpers
       import PrimordialWeb.Gettext
       alias PrimordialWeb.Router.Helpers, as: Routes
+      unquote(verified_routes())
+    end
+  end
+
+  def verified_routes do
+    quote do
+      use Phoenix.VerifiedRoutes,
+        endpoint: PrimordialWeb.Endpoint,
+        router: PrimordialWeb.Router,
+        statics: PrimordialWeb.static_paths()
     end
   end
 

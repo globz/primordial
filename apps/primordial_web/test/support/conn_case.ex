@@ -28,6 +28,8 @@ defmodule PrimordialWeb.ConnCase do
 
       # The default endpoint for testing
       @endpoint PrimordialWeb.Endpoint
+
+      use PrimordialWeb, :verified_routes
     end
   end
 

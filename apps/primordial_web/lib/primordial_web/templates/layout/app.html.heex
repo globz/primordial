@@ -1,5 +1,5 @@
 <main class="my-0 m-auto bg-blue-500 max-w-xl px-2">
-  <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-  <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+  <p class="alert alert-info" role="alert"><%= Phoenix.Flash.get(@flash, :info) %></p>
+  <p class="alert alert-danger" role="alert"><%= Phoenix.Flash.get(@flash, :error) %></p>
   <%= @inner_content %>
 </main>

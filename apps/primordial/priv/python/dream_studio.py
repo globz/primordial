@@ -20,8 +20,8 @@ def handle_message(message):
  if message_handler:
   # Decode Elixir's list to Python Dict
   message = list_decoder(message) 
-  #result = dream_studio_api(message)
-  result = test()
+  result = dream_studio_api(message)
+  #result = test()
   cast_message(message_handler, result)
 
 # Stability Host URL
@@ -48,9 +48,8 @@ def dream_studio_api(config):
     stability_api = client.StabilityInference(
         key=os.environ['STABILITY_KEY'], # API Key reference, source from ~/primordial/.env
         verbose=True, # Print debug messages.
-        engine="stable-diffusion-v1-5", # Set the engine to use for generation. 
-        # Available engines: stable-diffusion-v1 stable-diffusion-v1-5 stable-diffusion-512-v2-0 stable-diffusion-768-v2-0 
-        # stable-diffusion-512-v2-1 stable-diffusion-768-v2-1 stable-inpainting-v1-0 stable-inpainting-512-v2-0
+        engine="stable-diffusion-xl-1024-v1-0", # Set the engine to use for generation. 
+        # Available engines: stable-diffusion-xl-1024-v1-0, stable-diffusion-v1.6, esrgan-v1-x2plus
     )
 
     # Set up our initial generation parameters.

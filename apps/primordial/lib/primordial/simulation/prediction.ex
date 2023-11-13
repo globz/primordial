@@ -10,14 +10,17 @@ defmodule Primordial.Simulation.Prediction do
 
   def dream(config, retry, timeout) do
     PythonWorker.cast(:dream_studio, config, :dream, timeout)
+
     case PythonWorker.lookup(:dream, timeout) do
-      {:error, :timeout} ->
+      {:ok, :timeout} ->
         Logger.info("[#{__MODULE__}] Timeout")
         # Increase each timeout by 5000 for a max run time of 35_000
-        dream(config, retry - 1, timeout + 5000) 
+        dream(config, retry - 1, timeout + 5000)
+
       {:ok, :safe_filter} ->
         Logger.info("[#{__MODULE__}] Triggered safe_filter")
-        # Modify negative prompt?
+
+      # Modify negative prompt?
       {:ok, result} ->
         Logger.info("[#{__MODULE__}] Zzz!")
         {:ok, result}
@@ -32,9 +35,9 @@ defmodule Primordial.Simulation.Prediction do
       path: "apps/primordial_web/priv/static/images/simulation",
       format: "webp"
     ]
-    
+
     with {:ok, result} <- dream(dream_config) do
       IO.puts("with result  #{result}")
-    end    
-  end  
+    end
+  end
 end

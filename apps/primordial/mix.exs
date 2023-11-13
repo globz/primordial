@@ -36,10 +36,10 @@ defmodule Primordial.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix_pubsub, "~> 2.0"},
-      {:ecto_sql, "~> 3.6"},
+      {:phoenix_pubsub, "~> 2.1.3"},
+      {:ecto_sql, "~> 3.10.2"},
       {:postgrex, ">= 0.0.0"},
-      {:jason, "~> 1.2"},
+      {:jason, "~> 1.4.1"},
       {:swoosh, "~> 1.3"},
       {:erlport, "~> 0.10.1"},
       {:poolboy, "~> 1.5"}

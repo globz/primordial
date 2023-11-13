@@ -8,7 +8,8 @@ defmodule PrimordialWeb.Endpoint do
     store: :cookie,
     key: "_primordial_web_key",
     signing_salt: "+6ncC+Jf",
-    max_age: 5 * 7 * 24 * 60 * 60 # Valid for 35 days
+    # Valid for 35 days
+    max_age: 5 * 7 * 24 * 60 * 60
   ]
 
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
@@ -21,12 +22,12 @@ defmodule PrimordialWeb.Endpoint do
     at: "/",
     from: :primordial_web,
     gzip: false,
-    only: ~w(assets fonts images favicon.ico robots.txt)
+    only: PrimordialWeb.static_paths()
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
   # if code_reloading? do
-  if code_reloading? |> IO.inspect(label: :code_reloading) do    
+  if code_reloading? |> IO.inspect(label: :code_reloading) do
     socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
     plug Phoenix.LiveReloader
     plug Phoenix.CodeReloader
