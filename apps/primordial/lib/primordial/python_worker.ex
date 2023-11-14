@@ -182,7 +182,7 @@ defmodule Primordial.PythonWorker do
     with {:ok, pid} <-
            :python.start([
              {:python_path, to_charlist(path)},
-             {:python, ~c"/home/globz/primordial/.venv/bin/python3"}
+             {:python, to_charlist(Path.join(File.cwd!(), ".venv/bin/python3"))}
            ]) do
       Logger.info("[#{__MODULE__}] Started python worker instance #{inspect(pid)}")
 
