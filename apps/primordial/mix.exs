@@ -42,7 +42,8 @@ defmodule Primordial.MixProject do
       {:jason, "~> 1.4.1"},
       {:swoosh, "~> 1.3"},
       {:erlport, "~> 0.10.1"},
-      {:poolboy, "~> 1.5"}
+      {:poolboy, "~> 1.5"},
+      {:dotenv_parser, "~> 2.0"}
     ]
   end
 

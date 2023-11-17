@@ -23,7 +23,7 @@ erl_crash.dump
 /tmp
 
 # Secrets!
-.env
+/config/.secrets_env
 
 # python cache
 /apps/primordial/priv/python/__pycache__/

@@ -1,4 +1,5 @@
 import Config
+require Logger
 
 # config/runtime.exs is executed for all environments, including
 # during releases. It is executed after compilation and before the
@@ -70,4 +71,15 @@ if config_env() == :prod do
   #     config :swoosh, :api_client, Swoosh.ApiClient.Hackney
   #
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
+end
+
+# Load secret environment variables such as API keys
+# If .secrets_env is not found, create it and alert the error
+try do
+  DotenvParser.load_file("config/.secrets_env")
+rescue
+  _ ->
+    File.write(to_charlist(Path.join(File.cwd!(), "config/.secrets_env")), "API KEYS MISSING")
+    DotenvParser.load_file("config/.secrets_env")
+    Logger.alert("config/.secrets_env is missing, file has been created, please populate missing values!")
 end
