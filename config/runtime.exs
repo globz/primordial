@@ -79,7 +79,10 @@ try do
   DotenvParser.load_file("config/.secrets_env")
 rescue
   _ ->
-    File.write(to_charlist(Path.join(File.cwd!(), "config/.secrets_env")), "API KEYS MISSING")
+    File.write(to_charlist(Path.join(File.cwd!(), "config/.secrets_env")), "")
     DotenvParser.load_file("config/.secrets_env")
-    Logger.alert("config/.secrets_env is missing, file has been created, please populate missing values!")
+
+    Logger.alert(
+      "config/.secrets_env is missing, file has been created, please populate missing values!"
+    )
 end
