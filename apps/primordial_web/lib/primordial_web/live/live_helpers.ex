@@ -179,7 +179,7 @@ defmodule PrimordialWeb.LiveHelpers do
     ~H"""
     <button
       phx-click={JS.dispatch("primordial_web:clipcopy", to: @copy_from)}
-      class="copy-button invisible group-hover:visible"
+      class="copy-button invisible group-hover:visible top-0 right-0"
       aria-label="copy"
     >
       <svg

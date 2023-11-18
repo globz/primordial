@@ -61,11 +61,11 @@ defmodule PrimordialWeb.UserObjects.IdCardFunctions.Export do
             You may import this Token to another device or browser.
           </p>
         </div>
-        <pre class="group basis-full relative text-ellipsis overflow-hidden text-sm md:text-[15px] font-bold bg-[floralwhite]">
-      <.clipboard_button copy_from={@copy_from} />
-      <br>
-      <code id="token-secret" class="text-red-600"><%= @token %></code>
-      </pre>
+        <div class="group basis-full relative text-ellipsis overflow-hidden text-sm md:text-[15px] font-bold bg-[floralwhite]">
+          <.clipboard_button copy_from={@copy_from} />
+          <br />
+          <code id="token-secret" class="text-red-600"><%= @token %></code>
+        </div>
       </.id_card_fn_modal>
     </div>
     """

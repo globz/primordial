@@ -220,8 +220,6 @@
 /* Turn this into a component */
 .copy-button {
     position: absolute;
-    top: 9px;
-    right: 9px;
     background: transparent;
     border: none;
     cursor: pointer;
@@ -237,7 +235,6 @@
 }
 
 .copy-button.clicked {
-    top:-20px;
     opacity: 1;
     background: transparent;
     color: #408200;
