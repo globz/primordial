@@ -25,13 +25,17 @@ defmodule PrimordialWeb.Animations.SwipeAnimationComponent do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="swipe-animation">
-      <div class="id-card">
-        <div class="scc-tripe"></div>
-      </div>
-      <div class="swiper-top"></div>
-      <div class="swiper-bottom">
-        <div class={@reader_state}></div>
+    <div class="flex justify-center h-screen">
+      <div class="w-full sm:w-2/3 md:w-1/2 lg:w-1/3 xl:w-1/4 mx-2">
+        <div class="relative w-full h-48">
+          <div class="id-card">
+            <div class="scc-tripe"></div>
+          </div>
+          <div class="w-full sm:w-4/5 lg:w-96 swiper-top"></div>
+          <div class="w-full sm:w-4/5 lg:w-96 swiper-bottom">
+            <div class={@reader_state}></div>
+          </div>
+        </div>
       </div>
     </div>
     """

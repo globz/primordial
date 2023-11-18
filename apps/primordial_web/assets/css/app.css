@@ -252,14 +252,6 @@
     color: currentColor;
 }
 
-.swipe-animation{
-  position:relative;
-  width: 500px;
-  height: 200px;
-  margin: 60px auto;
-  overflow:hidden;
-}
-
 .id-card{
   width: 250px;
   height: 140px;
@@ -286,15 +278,11 @@
 height: 20px;
   bottom:105px;
   z-index: 0;
-  width: 400px;
-  left: calc(50% - 200px);
 }
 .swiper-bottom{
   height: 100px;
   bottom:0;
   z-index: 3;
-  width: 420px;
-  left: calc(50% - 210px);
   
   .light-indicator-valid{
     position:absolute;
