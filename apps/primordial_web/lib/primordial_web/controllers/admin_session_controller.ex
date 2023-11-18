@@ -10,7 +10,7 @@ defmodule PrimordialWeb.AdminSessionController do
 
   def create(conn, %{"_action" => "password_updated"} = params) do
     conn
-    |> put_session(:admin_return_to, ~p"/admins/settings")
+    |> put_session(:admin_return_to, ~p"/panopticon/settings")
     |> create(params, "Password updated successfully!")
   end
 
@@ -30,7 +30,7 @@ defmodule PrimordialWeb.AdminSessionController do
       conn
       |> put_flash(:error, "Invalid email or password")
       |> put_flash(:email, String.slice(email, 0, 160))
-      |> redirect(to: ~p"/admins/log_in")
+      |> redirect(to: ~p"/panopticon/log_in")
     end
   end
 

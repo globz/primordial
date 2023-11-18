@@ -8,14 +8,7 @@ defmodule PrimordialWeb.AdminRegistrationLive do
     ~H"""
     <div class="mx-auto max-w-sm">
       <.header class="text-center">
-        Register for an account
-        <:subtitle>
-          Already registered?
-          <.link navigate={~p"/admins/log_in"} class="font-semibold text-brand hover:underline">
-            Sign in
-          </.link>
-          to your account now.
-        </:subtitle>
+        Register new Admin account
       </.header>
 
       <.simple_form
@@ -24,7 +17,7 @@ defmodule PrimordialWeb.AdminRegistrationLive do
         phx-submit="save"
         phx-change="validate"
         phx-trigger-action={@trigger_submit}
-        action={~p"/admins/log_in?_action=registered"}
+        action={~p"/panopticon/log_in?_action=registered"}
         method="post"
       >
         <.error :if={@check_errors}>
@@ -59,7 +52,7 @@ defmodule PrimordialWeb.AdminRegistrationLive do
         {:ok, _} =
           Admins.deliver_admin_confirmation_instructions(
             admin,
-            &url(~p"/admins/confirm/#{&1}")
+            &url(~p"/panopticon/confirm/#{&1}")
           )
 
         changeset = Admins.change_admin_registration(admin)

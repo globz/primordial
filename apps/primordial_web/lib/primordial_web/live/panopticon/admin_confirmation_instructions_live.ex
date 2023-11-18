@@ -21,8 +21,8 @@ defmodule PrimordialWeb.AdminConfirmationInstructionsLive do
       </.simple_form>
 
       <p class="text-center mt-4">
-        <.link href={~p"/admins/register"}>Register</.link>
-        | <.link href={~p"/admins/log_in"}>Log in</.link>
+        <.link href={~p"/panopticon/register"}>Register</.link>
+        | <.link href={~p"/panopticon/log_in"}>Log in</.link>
       </p>
     </div>
     """
@@ -36,7 +36,7 @@ defmodule PrimordialWeb.AdminConfirmationInstructionsLive do
     if admin = Admins.get_admin_by_email(email) do
       Admins.deliver_admin_confirmation_instructions(
         admin,
-        &url(~p"/admins/confirm/#{&1}")
+        &url(~p"/panopticon/confirm/#{&1}")
       )
     end
 

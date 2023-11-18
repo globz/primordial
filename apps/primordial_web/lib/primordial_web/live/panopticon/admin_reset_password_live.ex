@@ -31,8 +31,8 @@ defmodule PrimordialWeb.AdminResetPasswordLive do
       </.simple_form>
 
       <p class="text-center text-sm mt-4">
-        <.link href={~p"/admins/register"}>Register</.link>
-        | <.link href={~p"/admins/log_in"}>Log in</.link>
+        <.link href={~p"/panopticon/register"}>Register</.link>
+        | <.link href={~p"/panopticon/log_in"}>Log in</.link>
       </p>
     </div>
     """
@@ -61,7 +61,7 @@ defmodule PrimordialWeb.AdminResetPasswordLive do
         {:noreply,
          socket
          |> put_flash(:info, "Password reset successfully.")
-         |> redirect(to: ~p"/admins/log_in")}
+         |> redirect(to: ~p"/panopticon/log_in")}
 
       {:error, changeset} ->
         {:noreply, assign_form(socket, Map.put(changeset, :action, :insert))}

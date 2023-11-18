@@ -63,7 +63,7 @@ defmodule PrimordialWeb.Router do
     scope "/" do
       pipe_through [:browser, :require_authenticated_admin]
 
-      live_dashboard "/admin/dashboard", metrics: PrimordialWeb.Telemetry
+      live_dashboard "/panopticon/dashboard", metrics: PrimordialWeb.Telemetry
     end
   end
 
@@ -86,13 +86,12 @@ defmodule PrimordialWeb.Router do
 
     live_session :redirect_if_admin_is_authenticated,
       on_mount: [{PrimordialWeb.AdminAuth, :redirect_if_admin_is_authenticated}] do
-      live "/admins/register", AdminRegistrationLive, :new
-      live "/admins/log_in", AdminLoginLive, :new
-      live "/admins/reset_password", AdminForgotPasswordLive, :new
-      live "/admins/reset_password/:token", AdminResetPasswordLive, :edit
+      live "/panopticon/log_in", AdminLoginLive, :new
+      live "/panopticon/reset_password", AdminForgotPasswordLive, :new
+      live "/panopticon/reset_password/:token", AdminResetPasswordLive, :edit
     end
 
-    post "/admins/log_in", AdminSessionController, :create
+    post "/panopticon/log_in", AdminSessionController, :create
   end
 
   ## Authenticated routes
@@ -100,24 +99,26 @@ defmodule PrimordialWeb.Router do
   scope "/", PrimordialWeb do
     pipe_through [:browser, :require_authenticated_admin]
 
-    get "/admins/log_out", AdminSessionController, :delete
+    get "/panopticon/log_out", AdminSessionController, :delete
 
     live_session :require_authenticated_admin,
       on_mount: [{PrimordialWeb.AdminAuth, :ensure_authenticated}] do
-      live "/admins/settings", AdminSettingsLive, :edit
-      live "/admins/settings/confirm_email/:token", AdminSettingsLive, :confirm_email
+      live "/panopticon/settings", AdminSettingsLive, :edit
+      live "/panopticon/settings/confirm_email/:token", AdminSettingsLive, :confirm_email
+      live "/panopticon/tower", AdminTowerLive, :watch
+      live "/panopticon/register", AdminRegistrationLive, :new
     end
   end
 
   scope "/", PrimordialWeb do
     pipe_through [:browser]
 
-    delete "/admins/log_out", AdminSessionController, :delete
+    delete "/panopticon/log_out", AdminSessionController, :delete
 
     live_session :current_admin,
       on_mount: [{PrimordialWeb.AdminAuth, :mount_current_admin}] do
-      live "/admins/confirm/:token", AdminConfirmationLive, :edit
-      live "/admins/confirm", AdminConfirmationInstructionsLive, :new
+      live "/panopticon/confirm/:token", AdminConfirmationLive, :edit
+      live "/panopticon/confirm", AdminConfirmationInstructionsLive, :new
     end
   end
 end

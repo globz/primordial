@@ -156,7 +156,7 @@ defmodule PrimordialWeb.AdminAuth do
       socket =
         socket
         |> Phoenix.LiveView.put_flash(:error, "You must log in to access this page.")
-        |> Phoenix.LiveView.redirect(to: ~p"/admins/log_in")
+        |> Phoenix.LiveView.redirect(to: ~p"/panopticon/log_in")
 
       {:halt, socket}
     end
@@ -206,7 +206,7 @@ defmodule PrimordialWeb.AdminAuth do
       conn
       |> put_flash(:error, "You must log in to access this page.")
       |> maybe_store_return_to()
-      |> redirect(to: ~p"/admins/log_in")
+      |> redirect(to: ~p"/panopticon/log_in")
       |> halt()
     end
   end
@@ -223,5 +223,5 @@ defmodule PrimordialWeb.AdminAuth do
 
   defp maybe_store_return_to(conn), do: conn
 
-  defp signed_in_path(_conn), do: ~p"/"
+  defp signed_in_path(_conn), do: ~p"/panopticon/tower"
 end

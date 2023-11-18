@@ -162,11 +162,15 @@ defmodule Primordial.Admins do
 
   ## Examples
 
-      iex> deliver_admin_update_email_instructions(admin, current_email, &url(~p"/admins/settings/confirm_email/#{&1})")
+      iex> deliver_admin_update_email_instructions(admin, current_email, &url(~p"/panopticon/settings/confirm_email/#{&1})")
       {:ok, %{to: ..., body: ...}}
 
   """
-  def deliver_admin_update_email_instructions(%Admin{} = admin, current_email, update_email_url_fun)
+  def deliver_admin_update_email_instructions(
+        %Admin{} = admin,
+        current_email,
+        update_email_url_fun
+      )
       when is_function(update_email_url_fun, 1) do
     {encoded_token, admin_token} = AdminToken.build_email_token(admin, "change:#{current_email}")
 
@@ -249,10 +253,10 @@ defmodule Primordial.Admins do
 
   ## Examples
 
-      iex> deliver_admin_confirmation_instructions(admin, &url(~p"/admins/confirm/#{&1}"))
+      iex> deliver_admin_confirmation_instructions(admin, &url(~p"/panopticon/confirm/#{&1}"))
       {:ok, %{to: ..., body: ...}}
 
-      iex> deliver_admin_confirmation_instructions(confirmed_admin, &url(~p"/admins/confirm/#{&1}"))
+      iex> deliver_admin_confirmation_instructions(confirmed_admin, &url(~p"/panopticon/confirm/#{&1}"))
       {:error, :already_confirmed}
 
   """
@@ -296,7 +300,7 @@ defmodule Primordial.Admins do
 
   ## Examples
 
-      iex> deliver_admin_reset_password_instructions(admin, &url(~p"/admins/reset_password/#{&1}"))
+      iex> deliver_admin_reset_password_instructions(admin, &url(~p"/panopticon/reset_password/#{&1}"))
       {:ok, %{to: ..., body: ...}}
 
   """
@@ -304,7 +308,11 @@ defmodule Primordial.Admins do
       when is_function(reset_password_url_fun, 1) do
     {encoded_token, admin_token} = AdminToken.build_email_token(admin, "reset_password")
     Repo.insert!(admin_token)
-    AdminNotifier.deliver_reset_password_instructions(admin, reset_password_url_fun.(encoded_token))
+
+    AdminNotifier.deliver_reset_password_instructions(
+      admin,
+      reset_password_url_fun.(encoded_token)
+    )
   end
 
   @doc """
