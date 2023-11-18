@@ -9,7 +9,7 @@ defmodule Primordial.Simulation.Scenario do
   to be randomly injected into the Simulation.    
   """
 
-  defstruct [:id, :name, :description, :prompts, :content, :depend_on]
+  defstruct [:id, :name, :description, :prompts, :content, :depend_on, :deployed, :active]
 
   @type t :: %__MODULE__{
           id: integer(),
@@ -17,7 +17,9 @@ defmodule Primordial.Simulation.Scenario do
           description: String.t(),
           prompts: map(),
           content: String.t(),
-          depend_on: integer()
+          depend_on: integer(),
+          deployed: boolean(),
+          active: boolean()
         }
 
   def new(opts \\ []) do
@@ -48,6 +50,14 @@ defmodule Primordial.Simulation.Scenario do
 
   defp put_opt({:depend_on, depend_on}, acc) when is_integer(depend_on) do
     %{acc | depend_on: depend_on}
+  end
+
+  defp put_opt({:deployed, deployed}, acc) when is_boolean(deployed) do
+    %{acc | deployed: deployed}
+  end
+
+  defp put_opt({:active, active}, acc) when is_boolean(active) do
+    %{acc | active: active}
   end
 
   defp put_opt(_opt, acc) do
