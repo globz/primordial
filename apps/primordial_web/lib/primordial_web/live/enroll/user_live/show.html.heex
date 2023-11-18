@@ -1,7 +1,7 @@
 <h1>Show User</h1>
 
 <%= if @live_action in [:edit] do %>
-  <.modal return_to={Routes.enroll_user_show_path(@socket, :show, @user)}>
+  <.modal_legacy return_to={Routes.enroll_user_show_path(@socket, :show, @user)}>
     <.live_component
       module={PrimordialWeb.Enroll.UserLive.FormComponent}
       id={@user.id}
@@ -10,7 +10,7 @@
       user={@user}
       return_to={Routes.enroll_user_show_path(@socket, :show, @user)}
     />
-  </.modal>
+  </.modal_legacy>
 <% end %>
 
 <ul>

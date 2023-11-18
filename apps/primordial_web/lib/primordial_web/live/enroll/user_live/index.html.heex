@@ -1,7 +1,7 @@
 <div class="banner"><h2>Enroll now!</h2></div>
 
 <%= if @live_action == :new do %>
-  <.modal return_to={Routes.enroll_user_index_path(@socket, :index)}>
+  <.modal_legacy return_to={Routes.enroll_user_index_path(@socket, :index)}>
     <.live_component
       module={PrimordialWeb.Enroll.UserLive.FormComponent}
       id={@user.id || :new}
@@ -10,7 +10,7 @@
       user={@user}
       return_to={Routes.enroll_user_index_path(@socket, :index)}
     />
-  </.modal>
+  </.modal_legacy>
   <% end %>
   
 <div>
