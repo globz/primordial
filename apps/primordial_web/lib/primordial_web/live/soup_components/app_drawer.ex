@@ -6,7 +6,7 @@ defmodule PrimordialWeb.SoupComponents.AppDrawer do
     ~H"""
     <div id="app-drawer">
       <.soup_app_drawer>
-        <h3 class="pb-2">app_id: <%= app_title(@drawer_id) %></h3>
+        <h3 class="pb-2 dark:text-white">app_id: <%= app_title(@drawer_id) %></h3>
         <div class="grid grid-cols-2 gap-4">
           <a
             href="#"
@@ -37,7 +37,7 @@ defmodule PrimordialWeb.SoupComponents.AppDrawer do
         </div>
         <div id="app-icon" class="grid grid-rows-2 mt-5 gap-5">
           <div id="card-photo" class={app_detailed_icon(@drawer_id)}></div>
-          <p id="app-desc">
+          <p id="app-desc" class="dark:text-white">
             <%= raw(app_desc(@drawer_id)) %>
           </p>
         </div>
