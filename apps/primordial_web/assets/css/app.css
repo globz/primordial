@@ -36,7 +36,7 @@
     }
 
     input {
-        @apply appearance-none bg-transparent border-2 border-solid border border-[#d1d1d1] rounded-md h-11 pt-[0.6rem] pr-[1rem] pb-[0.7rem] pl-[1rem] w-full;
+        @apply bg-transparent border-2 border-solid border border-[#d1d1d1] rounded-md h-11 pt-[0.6rem] pr-[1rem] pb-[0.7rem] pl-[1rem] w-full;
     }
 }
 
@@ -260,7 +260,7 @@
   overflow:hidden;
 }
 
-.credit-card{
+.id-card{
   width: 250px;
   height: 140px;
   background:#dadada;
