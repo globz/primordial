@@ -24,8 +24,8 @@ defmodule PrimordialWeb.SwipeLive do
     <% end %>
     <%= if @view_to_show == :error do %>
       If you previously exported your authentication Token, you may
-      <.link href={~p"/import"}>import</.link>
-      it or <.link href={~p"/enroll/users"}>enroll</.link>
+      <.link href={~p"/import"} class={["underline underline-offset-8"]}>import</.link>
+      it or <.link href={~p"/enroll/users"} class={["underline underline-offset-8"]}>enroll</.link>
       now.
     <% end %>
     """
