@@ -87,11 +87,10 @@ defmodule PrimordialWeb.AdminTowerLive do
             <button
               type="button"
               phx-click={JS.dispatch("primordial_web:toggleDrawer")}
-              data-drawer-target="dropdown-example"
+              data-drawer-target="dropdown-items"
               data-drawer-class-toggle="hidden"
               class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-              aria-controls="dropdown-example"
-              data-collapse-toggle="dropdown-example"
+              aria-controls="dropdown-items"
             >
               <svg
                 class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
@@ -119,7 +118,7 @@ defmodule PrimordialWeb.AdminTowerLive do
                 />
               </svg>
             </button>
-            <ul id="dropdown-example" class="hidden py-2 space-y-2">
+            <ul id="dropdown-items" class="hidden py-2 space-y-2">
               <li>
                 <a
                   href="#"
