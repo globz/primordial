@@ -27,11 +27,6 @@ defmodule PrimordialWeb.Router do
     live "/swipe", SwipeLive, :authenticate
     live "/import", ImportLive, :import
     live "/soup", SoupLive, :sign_in
-
-    # live_session :authenticated, on_mount: {PrimordialWeb.InitAssigns, :authenticated} do
-    #   live "/swipe", SwipeLive, :authenticate
-    #   live "/soup", SoupLive, :sign_in
-    # end
   end
 
   scope "/enroll", PrimordialWeb.Enroll, as: :enroll do
@@ -96,17 +91,17 @@ defmodule PrimordialWeb.Router do
 
   ## Authenticated routes
 
-  scope "/", PrimordialWeb do
+  scope "/panopticon", PrimordialWeb do
     pipe_through [:browser, :require_authenticated_admin]
 
-    get "/panopticon/log_out", AdminSessionController, :delete
+    get "/log_out", AdminSessionController, :delete
 
     live_session :require_authenticated_admin,
       on_mount: [{PrimordialWeb.AdminAuth, :ensure_authenticated}] do
-      live "/panopticon/settings", AdminSettingsLive, :edit
-      live "/panopticon/settings/confirm_email/:token", AdminSettingsLive, :confirm_email
-      live "/panopticon/tower", AdminTowerLive, :watch
-      live "/panopticon/register", AdminRegistrationLive, :new
+      live "/settings", AdminSettingsLive, :edit
+      live "/settings/confirm_email/:token", AdminSettingsLive, :confirm_email
+      live "/tower", AdminTowerLive, :watch
+      live "/register", AdminRegistrationLive, :new
     end
   end
 
