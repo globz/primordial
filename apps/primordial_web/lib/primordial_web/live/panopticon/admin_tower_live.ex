@@ -121,20 +121,28 @@ defmodule PrimordialWeb.AdminTowerLive do
             </button>
             <ul id="dropdown-items" class="hidden py-2 space-y-2">
               <li>
-                <a
-                  href="#"
+                <.link
+                  href={~p"/panopticon/register"}
                   class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                 >
-                  New Admin
-                </a>
+                  Register Admin
+                </.link>
               </li>
               <li>
-                <a
-                  href="#"
+                <.link
+                  href={~p"/panopticon/reset_password"}
                   class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                 >
                   Reset Admin Password
-                </a>
+                </.link>
+              </li>
+              <li>
+                <.link
+                  href={~p"/panopticon/confirm"}
+                  class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                >
+                  Resend Admin confirmation
+                </.link>
               </li>
               <li>
                 <a

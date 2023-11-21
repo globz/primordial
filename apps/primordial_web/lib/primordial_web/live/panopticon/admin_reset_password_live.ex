@@ -29,11 +29,6 @@ defmodule PrimordialWeb.AdminResetPasswordLive do
           <.button phx-disable-with="Resetting..." class="w-full">Reset Password</.button>
         </:actions>
       </.simple_form>
-
-      <p class="text-center text-sm mt-4">
-        <.link href={~p"/panopticon/register"}>Register</.link>
-        | <.link href={~p"/panopticon/log_in"}>Log in</.link>
-      </p>
     </div>
     """
   end

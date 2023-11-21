@@ -8,7 +8,7 @@ defmodule PrimordialWeb.AdminConfirmationInstructionsLive do
     <div class="mx-auto max-w-sm">
       <.header class="text-center">
         No confirmation instructions received?
-        <:subtitle>We'll send a new confirmation link to your inbox</:subtitle>
+        <:subtitle>We'll send a new confirmation link to the specified inbox</:subtitle>
       </.header>
 
       <.simple_form for={@form} id="resend_confirmation_form" phx-submit="send_instructions">
@@ -19,11 +19,6 @@ defmodule PrimordialWeb.AdminConfirmationInstructionsLive do
           </.button>
         </:actions>
       </.simple_form>
-
-      <p class="text-center mt-4">
-        <.link href={~p"/panopticon/register"}>Register</.link>
-        | <.link href={~p"/panopticon/log_in"}>Log in</.link>
-      </p>
     </div>
     """
   end
@@ -41,7 +36,7 @@ defmodule PrimordialWeb.AdminConfirmationInstructionsLive do
     end
 
     info =
-      "If your email is in our system and it has not been confirmed yet, you will receive an email with instructions shortly."
+      "If the email is in our system and it has not been confirmed yet, the recipient will receive an email with instructions shortly."
 
     {:noreply,
      socket

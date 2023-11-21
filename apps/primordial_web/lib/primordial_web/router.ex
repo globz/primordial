@@ -75,14 +75,12 @@ defmodule PrimordialWeb.Router do
   end
 
   ## Authentication routes
-
   scope "/", PrimordialWeb do
     pipe_through [:browser, :redirect_if_admin_is_authenticated]
 
     live_session :redirect_if_admin_is_authenticated,
       on_mount: [{PrimordialWeb.AdminAuth, :redirect_if_admin_is_authenticated}] do
       live "/panopticon/log_in", AdminLoginLive, :new
-      live "/panopticon/reset_password", AdminForgotPasswordLive, :new
       live "/panopticon/reset_password/:token", AdminResetPasswordLive, :edit
     end
 
@@ -90,7 +88,6 @@ defmodule PrimordialWeb.Router do
   end
 
   ## Authenticated routes
-
   scope "/panopticon", PrimordialWeb do
     pipe_through [:browser, :require_authenticated_admin]
 
@@ -99,9 +96,10 @@ defmodule PrimordialWeb.Router do
     live_session :require_authenticated_admin,
       on_mount: [{PrimordialWeb.AdminAuth, :ensure_authenticated}] do
       live "/settings", AdminSettingsLive, :edit
-      live "/settings/confirm_email/:token", AdminSettingsLive, :confirm_email
       live "/tower", AdminTowerLive, :watch
       live "/register", AdminRegistrationLive, :new
+      live "/reset_password", AdminForgotPasswordLive, :new
+      live "/confirm", AdminConfirmationInstructionsLive, :new
     end
   end
 
@@ -113,7 +111,7 @@ defmodule PrimordialWeb.Router do
     live_session :current_admin,
       on_mount: [{PrimordialWeb.AdminAuth, :mount_current_admin}] do
       live "/panopticon/confirm/:token", AdminConfirmationLive, :edit
-      live "/panopticon/confirm", AdminConfirmationInstructionsLive, :new
+      live "/panopticon/settings/confirm_email/:token", AdminSettingsLive, :confirm_email
     end
   end
 end

@@ -7,8 +7,8 @@ defmodule PrimordialWeb.AdminForgotPasswordLive do
     ~H"""
     <div class="mx-auto max-w-sm">
       <.header class="text-center">
-        Forgot your password?
-        <:subtitle>We'll send a password reset link to your inbox</:subtitle>
+        Reset Admin Password
+        <:subtitle>We'll send a password reset link to the specified inbox</:subtitle>
       </.header>
 
       <.simple_form for={@form} id="reset_password_form" phx-submit="send_email">
@@ -19,10 +19,6 @@ defmodule PrimordialWeb.AdminForgotPasswordLive do
           </.button>
         </:actions>
       </.simple_form>
-      <p class="text-center text-sm mt-4">
-        <.link href={~p"/panopticon/register"}>Register</.link>
-        | <.link href={~p"/panopticon/log_in"}>Log in</.link>
-      </p>
     </div>
     """
   end
@@ -40,7 +36,7 @@ defmodule PrimordialWeb.AdminForgotPasswordLive do
     end
 
     info =
-      "If your email is in our system, you will receive instructions to reset your password shortly."
+      "If the email is in our system, the administrator will receive instructions to reset the password shortly."
 
     {:noreply,
      socket

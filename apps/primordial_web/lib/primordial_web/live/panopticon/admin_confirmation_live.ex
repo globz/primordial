@@ -14,11 +14,6 @@ defmodule PrimordialWeb.AdminConfirmationLive do
           <.button phx-disable-with="Confirming..." class="w-full">Confirm my account</.button>
         </:actions>
       </.simple_form>
-
-      <p class="text-center mt-4">
-        <.link href={~p"/panopticon/register"}>Register</.link>
-        | <.link href={~p"/panopticon/log_in"}>Log in</.link>
-      </p>
     </div>
     """
   end
@@ -35,7 +30,7 @@ defmodule PrimordialWeb.AdminConfirmationLive do
       {:ok, _} ->
         {:noreply,
          socket
-         |> put_flash(:info, "Admin confirmed successfully.")
+         |> put_flash(:info, "Admin account confirmed successfully.")
          |> redirect(to: ~p"/")}
 
       :error ->
